@@ -6,7 +6,10 @@ const ListSchema = new Schema({
     type: String,
     required: [true, 'The List title is required']
   },
-  boardId: { type: Schema.Types.ObjectId, ref: 'Board' },
+  boardId: { type: Schema.Types.ObjectId,
+            required: [true, 'The board id is required'],
+            ref: 'Board' 
+          },
   position: Number,
   cards: [{ type: Schema.Types.ObjectId, ref: 'Card' }]
 }, {timestamps: true})
