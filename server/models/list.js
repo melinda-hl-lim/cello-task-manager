@@ -12,7 +12,16 @@ const ListSchema = new Schema({
           },
   position: Number,
   cards: [{ type: Schema.Types.ObjectId, ref: 'Card' }]
-}, {timestamps: true})
+}, {
+  timestamps: true,
+  toJSON: {
+    transform: (document, returnedObject) => {
+      returnedObject.id = returnedObject._id.toString();
+      delete returnedObject._id;
+      delete returnedObject.__v;
+    },
+  }
+})
 
 const List = mongoose.model('List', ListSchema);
 

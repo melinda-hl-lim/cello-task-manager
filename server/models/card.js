@@ -22,7 +22,16 @@ const CardSchema = new Schema({
           },
   comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
   actions: [{ type: Schema.Types.ObjectId, ref: 'Action' }]
-}, {timestamps: true})
+}, {
+  timestamps: true,
+  toJSON: {
+    transform: (document, returnedObject) => {
+      returnedObject.id = returnedObject._id.toString();
+      delete returnedObject._id;
+      delete returnedObject.__v;
+    },
+  }
+})
 
 const Card = mongoose.model('Card', CardSchema);
 

@@ -10,7 +10,16 @@ const CommentSchema = new Schema({
     type: String,
     required: [true, 'The comment text is required']
   }
-}, {timestamps: true})
+}, {
+  timestamps: true,
+  toJSON: {
+    transform: (document, returnedObject) => {
+      returnedObject.id = returnedObject._id.toString();
+      delete returnedObject._id;
+      delete returnedObject.__v;
+    },
+  }
+})
 
 const Comment = mongoose.model('Comment', CommentSchema);
 
