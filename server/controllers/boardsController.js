@@ -13,12 +13,25 @@ const getBoards = (req, res, next) => {
 
 const getBoard = (req, res, next) => {
   Board.findById(req.params.id)
-    .populate("lists", { 
+    .populate('lists', {
+      id: 1,
       title: 1,
       boardId: 1,
+      createdAt: 1,
+      updatedAt: 1,
       position: 1,
-      cards: // nested populate??
-     })
+      cards: 1,
+    })
+    .populate('lists.cards', {
+      id: 1, 
+      title: 1, 
+      dueDate: 1, 
+      labels: 1,
+      description: 1,
+      listId: 1,
+      boardId: 1,
+      position: 1,
+    })
     .then((board) => {
 
     })
