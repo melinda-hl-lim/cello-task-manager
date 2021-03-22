@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const CommentSchema = new Schema({
   cardId: { type: Schema.Types.ObjectId,
-            required: [true, 'The list id is required'],
+            required: [true, 'The card id is required'],
             ref: 'Card' 
           },
   text: {
