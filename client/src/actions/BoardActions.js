@@ -36,3 +36,7 @@ export function createBoard(board, callback) {
     });
   };
 }
+
+export function fetchBoard() {
+  
+}
