@@ -1,10 +1,10 @@
-export default function boards(state = [], action) {
-  switch (action.type) {
+export default function boards(state = [], { type, payload }) {
+  switch (type) {
     case "FETCH_BOARDS_SUCCESS": {
-      return action.boards;
+      return payload.boards;
     }
     case "CREATE_BOARD_SUCCESS": {
-      const newBoard = action.board;
+      const newBoard = payload.board;
       return state.concat(newBoard);
     }
     default:
