@@ -6,7 +6,7 @@ export function fetchBoardsRequest() {
 }
 
 export function fetchBoardsSuccess(boards) {
-  return { type: types.FETCH_BOARDS_SUCCESS, boards };
+  return { type: types.FETCH_BOARDS_SUCCESS, payload: { boards } };
 }
 
 export function createBoardRequest() {

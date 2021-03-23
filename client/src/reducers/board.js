@@ -3,9 +3,10 @@ import * as types from "../constants/ActionTypes";
 export default function board(state = null, { type, payload }) {
   switch(type) {
     case types.FETCH_BOARD_SUCCESS: {
-      return payload.board;
+      const { lists, ...boardWithoutLists } = payload.board;
+      return boardWithoutLists;
     }
-    case types.CLEAR_BOARD: {
+    case types.FETCH_BOARD_REQUEST: {
       return null;
     }
     default: return state;
