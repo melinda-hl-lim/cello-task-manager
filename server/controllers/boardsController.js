@@ -23,9 +23,9 @@ const getBoard = (req, res, next) => {
       cards: 1,
     })
     .populate('lists.cards', {
-      id: 1, 
-      title: 1, 
-      dueDate: 1, 
+      id: 1,
+      title: 1,
+      dueDate: 1,
       labels: 1,
       description: 1,
       listId: 1,
@@ -53,4 +53,5 @@ const createBoard = (req, res, next) => {
 };
 
 exports.getBoards = getBoards;
+exports.getBoard = getBoard;
 exports.createBoard = createBoard;
