@@ -1,6 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
-const List = () => {
+const List = ({ id }) => {
+  const { position, title } = useSelector(state => state.lists.find(list => list.id === id))
+  const cards = useSelector(state => state.cards.filter(card => card.listId === id))
+
   return (
     <div className="list-wrapper">
       <div className="list-background">
