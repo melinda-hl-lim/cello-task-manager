@@ -2,20 +2,21 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBoard } from "../../actions/BoardActions";
+import List from './List';
 
 const Board = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+
   const board = useSelector((state) => {
     return state.boards.find((board) => board.id === id);
   });
-  //const lists = useSelector((state) => state.lists);
+  const lists = useSelector((state) => state.lists);
 
-  // expecting boards.lists to be a list of ids
-  // const listComponents = lists.map((list) => {
-  //   <List key={list.id} id={listId} />;
-  // });
-
+  const listComponents = lists?.map((list) => 
+    <List key={list.id} id={list.id} />
+  );
+  
   useEffect(() => {
     dispatch(fetchBoard(id));
   }, [dispatch, id]);
@@ -25,92 +26,8 @@ const Board = () => {
       <main>
         <div id="list-container" className="list-container">
           <div id="existing-lists" className="existing-lists">
-            <div className="list-wrapper">
-              <div className="list-background">
-                <div className="list">
-                  <a className="more-icon sm-icon" href=""></a>
-                  <div>
-                    <p className="list-title">Stuff to try (this is a list)</p>
-                  </div>
-                  <div className="add-dropdown add-top">
-                    <div className="card"></div>
-                    <a className="button">Add</a>
-                    <i className="x-icon icon"></i>
-                    <div className="add-options">
-                      <span>...</span>
-                    </div>
-                  </div>
-                  <div id="cards-container" data-id="list-1-cards">
-                    <div className="card-background">
-                      <div className="card ">
-                        <i className="edit-toggle edit-icon sm-icon"></i>
-                        <div className="card-info">
-                          <div className="card-label green colorblindable"></div>
-                          <div className="card-label yellow colorblindable"></div>
-                          <div className="card-label red colorblindable"></div>
-                          <div className="card-label orange colorblindable"></div>
-                          <div className="card-label blue colorblindable"></div>
-                          <div className="card-label purple colorblindable"></div>
-                          <p>
-                            Cards do many cool things. Click on this card to
-                            open it and learn more...
-                          </p>
-                        </div>
-                        <div className="card-icons">
-                          <i className="clock-icon sm-icon overdue-recent completed">
-                            Aug 4
-                          </i>
-                          <i className="description-icon sm-icon"></i>
-                          <i className="comment-icon sm-icon"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="card-background">
-                      <div className="card ">
-                        <i className="edit-toggle edit-icon sm-icon"></i>
-                        <div className="cover-image"></div>
-                        <div className="card-info">
-                          <p>Another list with stuff</p>
-                        </div>
-                        <div className="card-icons">
-                          <i className="clock-icon sm-icon overdue ">Aug 3</i>
-                          <i className="description-icon sm-icon"></i>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="card-background">
-                      <div className="card ">
-                        <i className="edit-toggle edit-icon sm-icon"></i>
-                        <div className="cover-image"></div>
-                        <div className="card-info">
-                          <p>
-                            Use the + in the top menu to make your first board
-                            now.
-                          </p>
-                        </div>
-                        <div className="card-icons"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="add-dropdown add-bottom">
-                    <div className="card">
-                      <div className="card-info"></div>
-                      <textarea name="add-card"></textarea>
-                      <div className="members"></div>
-                    </div>
-                    <a className="button">Add</a>
-                    <i className="x-icon icon"></i>
-                    <div className="add-options">
-                      <span>...</span>
-                    </div>
-                  </div>
-                  <div className="add-card-toggle" data-position="bottom">
-                    Add a card...
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+            {listComponents}
+           </div>
           <div id="new-list" className="new-list">
             <span>Add a list...</span>
             <input type="text" placeholder="Add a list..." />
