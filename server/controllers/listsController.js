@@ -4,6 +4,7 @@ const { validationResult } = require("express-validator");
 
 const createList = (req, res, next) => {
   const errors = validationResult(req);
+  console.log(errors);
   if (errors.isEmpty()) {
     List.create(req.body)
       .then((list) => {
