@@ -2,6 +2,7 @@ import * as types from "../constants/ActionTypes";
 
 const extractLists = (board) => {
   const listsWithoutCards = board.lists.map(list => {
+    // eslint-disable-next-line no-unused-vars
     const {cards, ...listWithoutCards} = list;
     return listWithoutCards;
   })
