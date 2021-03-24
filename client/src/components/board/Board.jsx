@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBoard } from "../../actions/BoardActions";
-import List from './List';
+import List from '../list/List';
 
 const Board = () => {
   const { id } = useParams();
@@ -13,10 +13,12 @@ const Board = () => {
   });
   const lists = useSelector((state) => state.lists);
 
-  const listComponents = lists?.map((list) => 
-    <List key={list.id} id={list.id} />
-  );
-  
+  const listComponents = lists
+    ?.sort((a, b) => a.position - b.position)
+    .map((list) => 
+      <List key={list.id} id={list.id} />
+    );
+
   useEffect(() => {
     dispatch(fetchBoard(id));
   }, [dispatch, id]);
