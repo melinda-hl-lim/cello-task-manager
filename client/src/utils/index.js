@@ -5,8 +5,8 @@ export const shortDate = (date) => {
   return dateString.split(' ').slice(1, 3).join(' ');
 };
 
-export const howSoon = () => {
-  const difference = Date.now() - new Date(card.dueDate).getTime();
+export const howSoon = (dueDate) => {
+  const difference = Date.now() - new Date(dueDate).getTime();
   if (difference > 0) {
     // overdue
     if (difference > ONE_DAY) {

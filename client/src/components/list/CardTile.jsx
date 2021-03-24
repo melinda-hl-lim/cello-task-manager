@@ -9,7 +9,7 @@ const CardTile = ({ id }) => {
   )
   console.log(card)
   
-  const cardStatus = `${howSoon()} ${card.completed ? 'completed' : ''}`
+  const cardStatus = `${howSoon(card.dueDate)} ${card.completed ? 'completed' : ''}`
   return (
     <div className="card-background">
       <div className="card ">
