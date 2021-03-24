@@ -7,7 +7,6 @@ const CardTile = ({ id }) => {
   const labels = card.labels.map(label => 
     <div key={label} className={`card-label ${label} colorblindable`}></div>
   )
-  console.log(card)
   
   const cardStatus = `${howSoon(card.dueDate)} ${card.completed ? 'completed' : ''}`
   return (
