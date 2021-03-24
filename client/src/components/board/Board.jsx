@@ -32,7 +32,7 @@ const Board = () => {
           <div id="existing-lists" className="existing-lists">
             {listComponents}
            </div>
-          <AddList />
+          <AddList boardId = {id} />
         </div>
       </main>
       <div className="menu-sidebar">

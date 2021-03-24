@@ -39,6 +39,18 @@ const apiClient = {
       .then(unwrapData)
       .then(callback)
       .catch(logError);
+  },
+  createList: function(listTitle, boardId, callback) {
+    return axios
+      .post(routes.CREATE_LIST_URL, {
+        boardId: boardId,
+        list: {
+          title: listTitle
+        }
+      })
+      .then(unwrapData)
+      .then(callback)
+      .catch(logError);
   }
 };
 

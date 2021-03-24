@@ -118,7 +118,7 @@ const SingleBoard = () => {
                         <div className="card-info">
                           <p>
                             Add members to a board (via the sidebar to
-                            collaborate, share and discuss.
+                            collaborate, share and discuss).
                           </p>
                         </div>
                         <div className="card-icons">
