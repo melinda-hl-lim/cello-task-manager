@@ -12,6 +12,7 @@ const Board = () => {
   const board = useSelector((state) => {
     return state.boards.find((board) => board.id === id);
   });
+  
   const lists = useSelector((state) => state.lists);
 
   const listComponents = lists
