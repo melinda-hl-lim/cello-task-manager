@@ -18,9 +18,9 @@ export const howSoon = (dueDate) => {
   } else {
     // not overdue
     if (difference < ONE_DAY) {
-      return ""
-    } else {
       return "due-soon"
+    } else {
+      return ""
     }
   }
 }
