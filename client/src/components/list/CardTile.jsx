@@ -1,34 +1,34 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { shortDate, howSoon } from '../../utils';
 
 const CardTile = ({ id }) => {
   const card = useSelector(state => state.cards.find(card => card.id === id))
+  const labels = card.labels.map(label => 
+    <div key={label} className={`card-label ${label} colorblindable`}></div>
+  )
+  console.log(card)
+  
+  const cardStatus = `${howSoon()} ${card.completed ? 'completed' : ''}`
   return (
     <div className="card-background">
       <div className="card ">
         <i className="edit-toggle edit-icon sm-icon"></i>
         <div className="card-info">
-          <div className="card-label green colorblindable"></div>
-          <div className="card-label yellow colorblindable"></div>
-          <div className="card-label red colorblindable"></div>
-          <div className="card-label orange colorblindable"></div>
-          <div className="card-label blue colorblindable"></div>
-          <div className="card-label purple colorblindable"></div>
+          {labels}
           <p>
-            Cards do many cool things. Click on this card to open it and
-            learn more...
+            {card.description}
           </p>
         </div>
         <div className="card-icons">
-          <i className="clock-icon sm-icon overdue-recent completed">
-            Aug 4
+          <i className={`clock-icon sm-icon ${cardStatus}`}>
+            {shortDate(card.dueDate)}
           </i>
           <i className="description-icon sm-icon"></i>
           <i className="comment-icon sm-icon"></i>
         </div>
       </div>
-    </div>
-            
+    </div>   
   )
 }
 
