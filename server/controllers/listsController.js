@@ -8,7 +8,10 @@ const createList = (req, res, next) => {
   if (errors.isEmpty()) {
     List.create(req.body)
       .then((list) => {
-        List.findById(list.id).then(list => res.json({ list }))
+        List.findById(list.id).then(list => {
+          req.list = list;
+          next();
+        })
       })
       .catch(err => 
         next(new HttpError("Creating list failed, please try again", 500))

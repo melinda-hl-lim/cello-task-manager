@@ -12,7 +12,7 @@ export function createListSuccess(list) {
 export function createList(list, boardId, callback) {
   return function(dispatch) {
     dispatch(createListRequest());
-    apiClient.createList(list, boardId, ({ list })=> {
+    apiClient.createList(list, boardId, (list)=> {
       dispatch(createListSuccess(list));
 
       if (callback) {

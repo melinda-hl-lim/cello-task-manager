@@ -44,9 +44,7 @@ const apiClient = {
     return axios
       .post(routes.CREATE_LIST_URL, {
         boardId: boardId,
-        list: {
-          title: listTitle
-        }
+        title: listTitle
       })
       .then(unwrapData)
       .then(callback)
