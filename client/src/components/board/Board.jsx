@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBoard } from "../../actions/BoardActions";
-import List from '../list/List';
+import List from "../list/List";
 import AddList from "./AddList";
+import BoardHeader from "./BoardHeader";
 
 const Board = () => {
   const { id } = useParams();
@@ -12,14 +13,12 @@ const Board = () => {
   const board = useSelector((state) => {
     return state.boards.find((board) => board.id === id);
   });
-  
+
   const lists = useSelector((state) => state.lists);
 
   const listComponents = lists
     ?.sort((a, b) => a.position - b.position)
-    .map((list) => 
-      <List key={list.id} id={list.id} />
-    );
+    .map((list) => <List key={list.id} id={list.id} />);
 
   useEffect(() => {
     dispatch(fetchBoard(id));
@@ -27,12 +26,13 @@ const Board = () => {
 
   return (
     <>
+      <BoardHeader title={board?.title} />
       <main>
         <div id="list-container" className="list-container">
           <div id="existing-lists" className="existing-lists">
             {listComponents}
-           </div>
-          <AddList boardId = {id} />
+          </div>
+          <AddList boardId={id} />
         </div>
       </main>
       <div className="menu-sidebar">
