@@ -14,7 +14,9 @@ const Board = () => {
     return state.boards.find((board) => board.id === id);
   });
 
-  const lists = useSelector((state) => state.lists);
+  const lists = useSelector((state) =>
+    state.lists.filter((list) => list.boardId === board?.id)
+  );
 
   const listComponents = lists
     ?.sort((a, b) => a.position - b.position)

@@ -9,13 +9,17 @@ const extractLists = (board) => {
   return board.lists.map(extractCards)
 }
 
+const filterLists = (lists, boardId) => {
+  return lists.filter(list => list.boardId !== boardId);
+}
+
 
 export default function lists(state = [], {type, payload }) {
   switch(type) {
     case types.FETCH_BOARD_REQUEST:
-      return [];
+      return state;
     case types.FETCH_BOARD_SUCCESS:
-      return extractLists(payload.board)
+      return [...filterLists(state, payload.board.id), ...extractLists(payload.board)]
     case types.CREATE_LIST_SUCCESS:
       return [...state, extractCards(payload.list)]
     default:
