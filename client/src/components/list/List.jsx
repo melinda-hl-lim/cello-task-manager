@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import CardTile from "./CardTile";
+import { updateList } from "../../actions/ListActions";
 
 const List = ({ id }) => {
-  const { position, title } = useSelector((state) =>
+  const dispatch = useDispatch();
+  const list = useSelector((state) =>
     state.lists.find((list) => list.id === id)
   );
   const cards = useSelector((state) =>
@@ -11,7 +13,7 @@ const List = ({ id }) => {
   );
 
   const [editing, setEditing] = useState(false);
-  const [newTitle, setNewTitle] = useState(title);
+  const [newTitle, setNewTitle] = useState(list.title);
 
   const cardComponents = cards
     ?.sort((a, b) => a.position - b.position)
@@ -21,10 +23,30 @@ const List = ({ id }) => {
     setNewTitle(e.target.value);
   };
 
-  const toggleEdit = (e) => {
+  const startEdit = (e) => {
     e.preventDefault();
-    setEditing(!editing);
+    setEditing(true);
   };
+
+  const handleBlur = (e) => {
+    saveTitle();
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      saveTitle();
+    }
+  }
+
+  const saveTitle = () => {
+    dispatch(updateList({
+      ...list,
+      title: newTitle,
+    }, (updatedList) => {
+      setEditing(false)
+      setNewTitle(updatedList.title)
+    }))
+  }
 
   return (
     <div className="list-wrapper">
@@ -34,13 +56,16 @@ const List = ({ id }) => {
           <div>
             {editing ? (
               <input
+                autoFocus
                 className="list-title"
                 value={newTitle}
                 onChange={handleTitleChange}
+                onBlur={handleBlur}
+                onKeyDown={handleKeyDown}
               />
             ) : (
-              <p className="list-title" onClick={toggleEdit}>
-                {title}
+              <p className="list-title" onClick={startEdit}>
+                {list.title}
               </p>
             )}
           </div>

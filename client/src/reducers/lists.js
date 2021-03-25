@@ -22,6 +22,8 @@ export default function lists(state = [], {type, payload }) {
       return [...filterLists(state, payload.board.id), ...extractLists(payload.board)]
     case types.CREATE_LIST_SUCCESS:
       return [...state, extractCards(payload.list)]
+    case types.UPDATE_LIST_SUCCESS:
+      return state.filter((list) => list.id !== payload.list.id).concat(payload.list)
     default:
       return state;
   }

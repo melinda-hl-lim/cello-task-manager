@@ -13,7 +13,7 @@ const createList = (req, res, next) => {
           next();
         })
       })
-      .catch(err => 
+      .catch(err =>
         next(new HttpError("Creating list failed, please try again", 500))
       );
   } else {
@@ -21,4 +21,18 @@ const createList = (req, res, next) => {
   }
 }
 
+const updateList = (req, res, next) => {
+  const errors = validationResult(req);
+
+  if (errors.isEmpty()) {
+    List.findByIdAndUpdate(req.params.id, req.body, { new: true })
+      .then((updatedList) => {
+        res.json({ list: updatedList });
+      })
+  } else {
+    return next(new HttpError("The list title is empty.", 404));
+  }
+}
+
 exports.createList = createList;
+exports.updateList = updateList;
