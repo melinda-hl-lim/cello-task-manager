@@ -12,5 +12,5 @@ export const updateListUrl = (id) => {
 }
 
 export const getCardUrl = (id) => {
-  return `/api/boards/${id}`
+  return `/api/cards/${id}`
 }

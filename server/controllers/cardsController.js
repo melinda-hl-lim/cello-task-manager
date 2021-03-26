@@ -1,6 +1,8 @@
 const Card = require("../models/card");
 const HttpError = require("../models/httpError");
 const { validationResult } = require("express-validator");
+require('../models/comment');
+require('../models/action');
 
 const getCard = (req, res, next) => {
   const id = req.params.id;

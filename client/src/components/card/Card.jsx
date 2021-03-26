@@ -4,16 +4,18 @@ import { useParams } from "react-router";
 import { fetchCard } from "../../actions/CardActions";
 
 const Card = () => {
-  const { id } = useParams()
-  const card = useSelector(state => state.cards.find(card => card.id === id))
-  const dispatch = useDispatch()
+  const { id } = useParams();
+  const card = useSelector((state) =>
+    state.cards.find((card) => card.id === id)
+  );
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchCard(id));
-  }, [dispatch, id])
+  }, [dispatch, id]);
 
   if (!card) {
-    return null
+    return null;
   }
 
   return (
@@ -163,8 +165,9 @@ const Card = () => {
                     <div className="card-member small-size">VR</div>
                   </div>
                   <p>
-                    <span className="member-name">Victor Reyes</span> changed the
-                    background of this board <small>yesterday at 4:53 PM</small>
+                    <span className="member-name">Victor Reyes</span> changed
+                    the background of this board{" "}
+                    <small>yesterday at 4:53 PM</small>
                   </p>
                 </li>
                 <li className="activity-comment">

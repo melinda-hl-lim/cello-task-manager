@@ -9,16 +9,16 @@ import BoardHeader from "./BoardHeader";
 const Board = () => {
   const { id: routeId } = useParams();
   const dispatch = useDispatch();
-  const boardIdMatch = useRouteMatch('/boards/:id');
+  const boardIdMatch = useRouteMatch("/boards/:id");
   let boardId;
-  const state = useSelector(state => state);
+  const state = useSelector((state) => state);
   if (boardIdMatch) {
     boardId = routeId;
   } else {
-    const card = state?.cards?.find(card => card.id === routeId);
+    const card = state?.cards?.find((card) => card?.id === routeId);
     if (card) {
       boardId = card.boardId;
-    } 
+    }
   }
 
   const board = useSelector((state) => {
@@ -34,7 +34,7 @@ const Board = () => {
     .map((list) => <List key={list.id} id={list.id} />);
 
   useEffect(() => {
-    if(boardId) {
+    if (boardId) {
       dispatch(fetchBoard(boardId));
     }
   }, [dispatch, boardId]);
