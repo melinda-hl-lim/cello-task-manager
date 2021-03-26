@@ -34,7 +34,7 @@ const List = ({ id }) => {
     setEditing(true);
   };
 
-  const handleBlur = (e) => {
+  const handleBlur = () => {
     saveTitle();
   }
 
