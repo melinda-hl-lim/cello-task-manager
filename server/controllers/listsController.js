@@ -34,5 +34,12 @@ const updateList = (req, res, next) => {
   }
 }
 
+const addCardToList = (req, res, next) => {
+  List.findByIdAndUpdate(req.body.listId, { '$addToSet': { cards: req.card.id } }, { new: true })
+    .then(updatedList => res.json({ card: req.card }))
+    .catch(err => next(new HttpError("Could not add card to list", 500)))
+}
+
 exports.createList = createList;
 exports.updateList = updateList;
+exports.addCardToList = addCardToList;

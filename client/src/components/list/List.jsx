@@ -1,7 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import CardTile from "./CardTile";
 import { updateList } from "../../actions/ListActions";
+import { createCard } from "../../actions/CardActions";
 
 const List = ({ id }) => {
   const dispatch = useDispatch();
@@ -17,6 +18,8 @@ const List = ({ id }) => {
   const [editing, setEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(list.title);
   const [addingCard, setAddingCard] = useState(false);
+  const [newCardText, setNewCardText] = useState("");
+  const [addButtonEnabled, setAddButtonEnabled] = useState(true);
 
   const cardComponents = cards
     ?.sort((a, b) => a.position - b.position)
@@ -51,10 +54,38 @@ const List = ({ id }) => {
     }))
   }
 
-  const handleToggleAddCard = () => {
-    setAddingCard(true);
-    addCardInput.current.focus();
+  const handleCardTextChange = (e) => {
+    setNewCardText(e.target.value);
   }
+
+  const handleOpenAddCard = () => {
+    setAddingCard(true);
+  }
+
+  const handleCloseAddCard = () => {
+    setAddingCard(false);
+  }
+
+  const toggleAddButton = () => {
+    setAddButtonEnabled(!addButtonEnabled);
+  }
+
+  const handleAddCard = () => {
+    if(addButtonEnabled) {
+      toggleAddButton();
+      dispatch(createCard(newCardText, list.id, list.boardId, () => {
+        setNewCardText("");
+        setAddingCard(false);
+        toggleAddButton();
+      }));
+    }
+  }
+
+  useEffect(() => {
+    if (addingCard) {
+      addCardInput.current.focus();
+    }
+  }, [addingCard])
 
   return (
     <div className={`list-wrapper ${addingCard ? "add-dropdown-active" : "" }`}>
@@ -79,8 +110,8 @@ const List = ({ id }) => {
           </div>
           <div className="add-dropdown add-top">
             <div className="card"></div>
-            <a className="button">Add</a>
-            <i className="x-icon icon"></i>
+            <a className="button" onClick={handleAddCard}>Add</a>
+            <i className="x-icon icon" ></i>
             <div className="add-options">
               <span>...</span>
             </div>
@@ -91,16 +122,16 @@ const List = ({ id }) => {
           <div className={`add-dropdown add-bottom ${addingCard ? "active-card" : ""}`}>
             <div className="card">
               <div className="card-info"></div>
-              <textarea ref={addCardInput} name="add-card"></textarea>
+              <textarea ref={addCardInput} name="add-card" value={newCardText} onChange={handleCardTextChange}></textarea>
               <div className="members"></div>
             </div>
             <a className="button">Add</a>
-            <i className="x-icon icon"></i>
+            <i className="x-icon icon" onClick={handleCloseAddCard}></i>
             <div className="add-options">
               <span>...</span>
             </div>
           </div>
-          <div className="add-card-toggle" data-position="bottom" onClick={handleToggleAddCard}>
+          <div className="add-card-toggle" data-position="bottom" onClick={handleOpenAddCard}>
             Add a card...
           </div>
         </div>

@@ -13,7 +13,11 @@ export default function cards(state = [], {type, payload }) {
     case types.FETCH_BOARD_REQUEST:
       return state;
     case types.FETCH_BOARD_SUCCESS:
-      return [...filterCards(state, payload.board.id), ...extractCards(payload.board)]
+      return [...filterCards(state, payload.board.id), ...extractCards(payload.board)];
+    case types.CREATE_CARD_REQUEST:
+      return state;
+    case types.CREATE_CARD_SUCCESS:
+      return [...state, payload.card];
     default:
       return state;
   }
