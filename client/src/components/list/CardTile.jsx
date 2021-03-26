@@ -16,7 +16,7 @@ const CardTile = ({ id }) => {
         <div className="card-info">
           {labels}
           <p>
-            {card.description}
+            {card.title}
           </p>
         </div>
         <div className="card-icons">

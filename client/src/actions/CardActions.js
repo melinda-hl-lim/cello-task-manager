@@ -12,7 +12,7 @@ export function createCardSuccess(card) {
 export function createCard(cardTitle, listId, boardId, callback) {
   return function(dispatch) {
     dispatch(createCardRequest());
-    apiClient.createCard(cardTitle, listId, boardId, (card) => {
+    apiClient.createCard(cardTitle, listId, boardId, ({card}) => {
       dispatch(createCardSuccess(card));
 
       if (callback) {

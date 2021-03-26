@@ -110,7 +110,7 @@ const List = ({ id }) => {
           </div>
           <div className="add-dropdown add-top">
             <div className="card"></div>
-            <a className="button" onClick={handleAddCard}>Add</a>
+            <a className="button">Add</a>
             <i className="x-icon icon" ></i>
             <div className="add-options">
               <span>...</span>
@@ -125,7 +125,7 @@ const List = ({ id }) => {
               <textarea ref={addCardInput} name="add-card" value={newCardText} onChange={handleCardTextChange}></textarea>
               <div className="members"></div>
             </div>
-            <a className="button">Add</a>
+            <a className="button" onClick={handleAddCard}>Add</a>
             <i className="x-icon icon" onClick={handleCloseAddCard}></i>
             <div className="add-options">
               <span>...</span>

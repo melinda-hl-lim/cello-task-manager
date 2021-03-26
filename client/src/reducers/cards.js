@@ -17,6 +17,7 @@ export default function cards(state = [], {type, payload }) {
     case types.CREATE_CARD_REQUEST:
       return state;
     case types.CREATE_CARD_SUCCESS:
+      // console.log(payload);
       return [...state, payload.card];
     default:
       return state;
