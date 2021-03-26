@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { shortDate, howSoon } from '../../utils';
 
 const CardTile = ({ id }) => {
@@ -11,22 +12,24 @@ const CardTile = ({ id }) => {
   const cardStatus = `${howSoon(card.dueDate)} ${card.completed ? 'completed' : ''}`
   return (
     <div className="card-background">
-      <div className="card ">
-        <i className="edit-toggle edit-icon sm-icon"></i>
-        <div className="card-info">
-          {labels}
-          <p>
-            {card.title}
-          </p>
+      <Link to={`/cards/${card.id}`} >
+        <div className="card">
+          <i className="edit-toggle edit-icon sm-icon"></i>
+          <div className="card-info">
+            {labels}
+            <p>
+              {card.title}
+            </p>
+          </div>
+          <div className="card-icons">
+            <i className={`clock-icon sm-icon ${cardStatus}`}>
+              {shortDate(card.dueDate)}
+            </i>
+            <i className="description-icon sm-icon"></i>
+            <i className="comment-icon sm-icon"></i>
+          </div>
         </div>
-        <div className="card-icons">
-          <i className={`clock-icon sm-icon ${cardStatus}`}>
-            {shortDate(card.dueDate)}
-          </i>
-          <i className="description-icon sm-icon"></i>
-          <i className="comment-icon sm-icon"></i>
-        </div>
-      </div>
+      </Link>
     </div>   
   )
 }

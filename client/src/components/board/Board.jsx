@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useRouteMatch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBoard } from "../../actions/BoardActions";
 import List from "../list/List";
@@ -7,11 +7,22 @@ import AddList from "./AddList";
 import BoardHeader from "./BoardHeader";
 
 const Board = () => {
-  const { id } = useParams();
+  const { id: routeId } = useParams();
   const dispatch = useDispatch();
+  const boardIdMatch = useRouteMatch('/boards/:id');
+  let boardId;
+  const state = useSelector(state => state);
+  if (boardIdMatch) {
+    boardId = routeId;
+  } else {
+    const card = state?.cards?.find(card => card.id === routeId);
+    if (card) {
+      boardId = card.boardId;
+    } 
+  }
 
   const board = useSelector((state) => {
-    return state.boards.find((board) => board.id === id);
+    return state.boards.find((board) => board.id === boardId);
   });
 
   const lists = useSelector((state) =>
@@ -23,8 +34,10 @@ const Board = () => {
     .map((list) => <List key={list.id} id={list.id} />);
 
   useEffect(() => {
-    dispatch(fetchBoard(id));
-  }, [dispatch, id]);
+    if(boardId) {
+      dispatch(fetchBoard(boardId));
+    }
+  }, [dispatch, boardId]);
 
   return (
     <>
@@ -34,7 +47,7 @@ const Board = () => {
           <div id="existing-lists" className="existing-lists">
             {listComponents}
           </div>
-          <AddList boardId={id} />
+          <AddList boardId={boardId} />
         </div>
       </main>
       <div className="menu-sidebar">

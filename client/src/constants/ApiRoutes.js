@@ -10,3 +10,7 @@ export const getBoardUrl = (id) => {
 export const updateListUrl = (id) => {
   return `/api/lists/${id}`;
 }
+
+export const getCardUrl = (id) => {
+  return `/api/boards/${id}`
+}

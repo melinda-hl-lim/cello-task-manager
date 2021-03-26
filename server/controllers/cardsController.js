@@ -2,6 +2,20 @@ const Card = require("../models/card");
 const HttpError = require("../models/httpError");
 const { validationResult } = require("express-validator");
 
+const getCard = (req, res, next) => {
+  const id = req.params.id;
+  Card
+    .findById(id)
+    .populate(['comments','actions'])
+    .then((card) => {
+      res.json({card})
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(404).end();
+    })
+}
+
 const createCard = (req, res, next) => {
   const errors = validationResult(req);
   console.log(errors);
@@ -21,4 +35,5 @@ const createCard = (req, res, next) => {
   }
 }
 
+exports.getCard = getCard;
 exports.createCard = createCard;
