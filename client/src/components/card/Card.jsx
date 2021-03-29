@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
-import Action from './Action';
-import Comment from './Comment';
+import Action from "./Action";
+import Comment from "./Comment";
 import { fetchCard } from "../../actions/CardActions";
 import { longDate, howSoon, pastDue } from "../../utils";
 
@@ -11,14 +11,14 @@ const Card = () => {
   const card = useSelector((state) =>
     state.cards.find((card) => card.id === id)
   );
-  const list = useSelector((state) => 
+  const list = useSelector((state) =>
     state.lists.find((list) => list.id === card?.listId)
-  )
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchCard(id));
-  }, [dispatch, id]);
+  }, [dispatch, id, card]);
 
   if (!card || !list) {
     return null;
@@ -26,47 +26,44 @@ const Card = () => {
   console.log(card);
   // TODO: write this.
   const handleCloseModal = () => {
-    return
-  }
+    return;
+  };
 
   const labelsComponents = card.labels.map((label) => {
     return (
       <div className="member-container" key={label}>
         <div className={`${label} label colorblindable`}></div>
       </div>
-    )
-  })
+    );
+  });
 
   const dueDateComponent = card.dueDate ? (
-  <li className="due-date-section">
-    <h3>Due Date</h3>
-    <div id="dueDateDisplay" className={howSoon(card.dueDate)}>
-      <input
-        id="dueDateCheckbox"
-        type="checkbox"
-        className="checkbox"
-        checked=""
-      />
-      {longDate(card.dueDate)} <span>{pastDue(card.dueDate)}</span>
-    </div>
-  </li>
+    <li className="due-date-section">
+      <h3>Due Date</h3>
+      <div id="dueDateDisplay" className={howSoon(card.dueDate)}>
+        <input
+          id="dueDateCheckbox"
+          type="checkbox"
+          className="checkbox"
+          checked=""
+        />
+        {longDate(card.dueDate)} <span>{pastDue(card.dueDate)}</span>
+      </div>
+    </li>
   ) : null;
 
-  const commentsAndActions = card.comments.concat(card.actions)
+  const commentsAndActions = card.comments
+    .concat(card.actions)
     .sort((item1, item2) => item1.createdAt - item2.createdAt)
     .map((item) => {
-      if (item.description) { // is action
-        return (<Action 
-                  key={item.id}
-                  action={item}
-                />)
-      } else { //is comment
-        return (<Comment 
-                  key={item.id}
-                  comment={item}
-                />)
+      if (item.description) {
+        // is action
+        return <Action key={item.id} action={item} />;
+      } else {
+        //is comment
+        return <Comment key={item.id} comment={item} />;
       }
-    })
+    });
 
   return (
     <div id="modal-container">
@@ -80,7 +77,10 @@ const Card = () => {
             {card.title}
           </textarea>
           <p>
-            in list <a className="link" onClick={handleCloseModal}>{list.title}</a>
+            in list{" "}
+            <a className="link" onClick={handleCloseModal}>
+              {list.title}
+            </a>
             <i className="sub-icon sm-icon"></i>
           </p>
         </header>
@@ -89,19 +89,17 @@ const Card = () => {
           <ul className="modal-outer-list">
             <li className="details-section">
               <ul className="modal-details-list">
-
                 <li className="labels-section">
                   <h3>Labels</h3>
-                  { labelsComponents }
+                  {labelsComponents}
                   <div className="member-container">
                     <i className="plus-icon sm-icon"></i>
                   </div>
                 </li>
 
                 <br />
-                
-                {dueDateComponent}
 
+                {dueDateComponent}
               </ul>
 
               <form className="description">
@@ -109,9 +107,7 @@ const Card = () => {
                 <span id="description-edit" className="link">
                   Edit
                 </span>
-                <p className="textarea-overlay">
-                  {card.description}
-                </p>
+                <p className="textarea-overlay">{card.description}</p>
                 <p id="description-edit-options" className="hidden">
                   You have unsaved edits on this field.{" "}
                   <span className="link">View edits</span> -{" "}
@@ -126,7 +122,7 @@ const Card = () => {
                 <div className="member-container">
                   <div className="card-member">TP</div>
                 </div>
-                
+
                 <div className="comment">
                   <label>
                     <textarea
@@ -149,7 +145,6 @@ const Card = () => {
                     </div>
                   </label>
                 </div>
-
               </div>
             </li>
 
@@ -160,9 +155,8 @@ const Card = () => {
               </ul>
 
               <ul className="modal-activity-list">
-
                 {commentsAndActions}
-                
+
                 {/* <li className="activity-comment">
                   <div className="member-container">
                     <div className="card-member">VR</div>
