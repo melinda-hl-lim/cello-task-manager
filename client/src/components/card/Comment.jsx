@@ -1,8 +1,7 @@
-import React from 'react';
-import { relativeTime } from '../../utils';
+import React from "react";
+import { relativeTime } from "../../utils";
 
 const Comment = ({ comment }) => {
-  console.log(comment)
   return (
     <li>
       <div className="member-container">
@@ -16,9 +15,8 @@ const Comment = ({ comment }) => {
         {relativeTime(comment.createdAt)} - <span className="link">Edit</span> -{" "}
         <span className="link">Delete</span>
       </small>
-      
     </li>
-  )
-}
+  );
+};
 
 export default Comment;

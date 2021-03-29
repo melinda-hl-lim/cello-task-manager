@@ -19,6 +19,7 @@ const getBoard = (req, res, next) => {
       path: 'lists',
       populate: {
         path: "cards",
+        select: ["description", "id", "title", "boardId", "position", "dueDate", "labels", "listId"]
       },
     })
     .then((board) => {

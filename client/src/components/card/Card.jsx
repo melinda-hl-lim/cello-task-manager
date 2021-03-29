@@ -17,13 +17,14 @@ const Card = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchCard(id));
+    if (!card?.actions) {
+      dispatch(fetchCard(id));
+    }
   }, [dispatch, id, card]);
 
-  if (!card || !list) {
+  if (!card || !list || !card.actions) {
     return null;
   }
-  console.log(card);
   // TODO: write this.
   const handleCloseModal = () => {
     return;
