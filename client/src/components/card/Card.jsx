@@ -55,7 +55,11 @@ const Card = () => {
 
   const commentsAndActions = card.comments
     .concat(card.actions)
-    .sort((item1, item2) => item1.createdAt - item2.createdAt)
+    .sort(
+      (item1, item2) =>
+        new Date(item2.createdAt).getTime() -
+        new Date(item1.createdAt).getTime()
+    )
     .map((item) => {
       if (item.description) {
         // is action
