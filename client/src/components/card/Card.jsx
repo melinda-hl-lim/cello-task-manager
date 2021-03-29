@@ -2,45 +2,79 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { fetchCard } from "../../actions/CardActions";
+import { longDate, howSoon, pastDue } from "../../utils";
 
 const Card = () => {
   const { id } = useParams();
   const card = useSelector((state) =>
     state.cards.find((card) => card.id === id)
   );
+  const list = useSelector((state) => 
+    state.lists.find((list) => list.id === card?.listId)
+  )
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchCard(id));
   }, [dispatch, id]);
 
-  if (!card) {
+  if (!card || !list) {
     return null;
   }
+
+  // TODO: write this.
+  const handleCloseModal = () => {
+    return
+  }
+
+  const labelsComponents = card.labels.map((label) => {
+    return (
+      <div className="member-container" key={label}>
+        <div className={`${label} label colorblindable`}></div>
+      </div>
+    )
+  })
+
+  const dueDateComponent = card.dueDate ? (
+  <li className="due-date-section">
+    <h3>Due Date</h3>
+    <div id="dueDateDisplay" className={howSoon(card.dueDate)}>
+      <input
+        id="dueDateCheckbox"
+        type="checkbox"
+        className="checkbox"
+        checked=""
+      />
+      {longDate(card.dueDate)} <span>{pastDue(card.dueDate)}</span>
+    </div>
+  </li>
+  ) : null;
 
   return (
     <div id="modal-container">
       <div className="screen"></div>
       <div id="modal">
         <i className="x-icon icon close-modal"></i>
+
         <header>
           <i className="card-icon icon .close-modal"></i>
           <textarea className="list-title" style={{ height: "45px" }}>
-            Cards do many cool things. Click on this card to open it and learn
-            more...
+            {card.title}
           </textarea>
           <p>
-            in list <a className="link">Stuff to try (this is a list)</a>
+            in list <a className="link" onClick={handleCloseModal}>{list.title}</a>
             <i className="sub-icon sm-icon"></i>
           </p>
         </header>
+
         <section className="modal-main">
           <ul className="modal-outer-list">
             <li className="details-section">
               <ul className="modal-details-list">
                 <li className="labels-section">
                   <h3>Labels</h3>
-                  <div className="member-container">
+                  { labelsComponents }
+                  {/* <div className="member-container">
                     <div className="green label colorblindable"></div>
                   </div>
                   <div className="member-container">
@@ -57,23 +91,15 @@ const Card = () => {
                   </div>
                   <div className="member-container">
                     <div className="red label colorblindable"></div>
-                  </div>
+                  </div> */}
                   <div className="member-container">
                     <i className="plus-icon sm-icon"></i>
                   </div>
                 </li>
-                <li className="due-date-section">
-                  <h3>Due Date</h3>
-                  <div id="dueDateDisplay" className="overdue completed">
-                    <input
-                      id="dueDateCheckbox"
-                      type="checkbox"
-                      className="checkbox"
-                      checked=""
-                    />
-                    Aug 4 at 10:42 AM <span>(past due)</span>
-                  </div>
-                </li>
+                <br />
+                
+                {dueDateComponent}
+
               </ul>
               <form className="description">
                 <p>Description</p>

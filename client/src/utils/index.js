@@ -1,9 +1,16 @@
+import moment from "moment";
+
 const ONE_DAY = 86400000
 
+// Format: MMM DD
 export const shortDate = (date) => {
-  const dateString = (new Date(date)).toDateString();
-  return dateString.split(' ').slice(1, 3).join(' ');
+  return moment(date).format('MMM DD');
 };
+
+// Format: MMM DD at HH:MM AM
+export const longDate = (date) => {
+  return shortDate(date) + ' at ' + moment(date).format('LT');
+}
 
 export const howSoon = (dueDate) => {
   const difference = Date.now() - new Date(dueDate).getTime();
@@ -23,4 +30,14 @@ export const howSoon = (dueDate) => {
       return ""
     }
   }
+}
+
+export const pastDue = (dueDate) => {
+  const difference = Date.now() - new Date(dueDate).getTime();
+
+  if (difference > 0) {
+    return "\(past due\)"
+  } 
+
+  return "";
 }
