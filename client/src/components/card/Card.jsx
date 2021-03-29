@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
+import { useHistory } from "react-router-dom";
 import Action from "./Action";
 import Comment from "./Comment";
 import { fetchCard } from "../../actions/CardActions";
@@ -8,6 +9,7 @@ import { longDate, howSoon, pastDue } from "../../utils";
 
 const Card = () => {
   const { id } = useParams();
+  const history = useHistory();
   const card = useSelector((state) =>
     state.cards.find((card) => card.id === id)
   );
@@ -27,6 +29,7 @@ const Card = () => {
   }
   // TODO: write this.
   const handleCloseModal = () => {
+    history.push(`/boards/${card.boardId}`);
     return;
   };
 
@@ -74,7 +77,7 @@ const Card = () => {
     <div id="modal-container">
       <div className="screen"></div>
       <div id="modal">
-        <i className="x-icon icon close-modal"></i>
+        <i className="x-icon icon close-modal" onClick={handleCloseModal}></i>
 
         <header>
           <i className="card-icon icon .close-modal"></i>
