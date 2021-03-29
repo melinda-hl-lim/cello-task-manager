@@ -8,6 +8,10 @@ const filterCards = (cards, boardId) => {
   return cards.filter(card => card.boardId !== boardId);
 }
 
+const filterCardsByCardId = (cards, cardId) => {
+  return cards.filter(card => card.id !== cardId);
+}
+
 export default function cards(state = [], {type, payload }) {
   switch(type) {
     case types.FETCH_BOARD_REQUEST:
@@ -20,7 +24,7 @@ export default function cards(state = [], {type, payload }) {
       // console.log(payload);
       return [...state, payload.card];
     case types.FETCH_CARD_SUCCESS:
-      return [...state, payload.card];
+      return [...filterCardsByCardId(state, payload.card.id), payload.card];
     case types.FETCH_CARD_REQUEST:
       return state;
     default:
