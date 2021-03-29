@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useRouteMatch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBoard } from "../../actions/BoardActions";
@@ -8,6 +8,7 @@ import BoardHeader from "./BoardHeader";
 
 const Board = () => {
   const { id: routeId } = useParams();
+  const [activeList, setActiveList] = useState(null);
   const dispatch = useDispatch();
   const boardIdMatch = useRouteMatch("/boards/:id");
   let boardId;
@@ -29,9 +30,24 @@ const Board = () => {
     state.lists.filter((list) => list.boardId === board?.id)
   );
 
+  const handleAddCardClick = (id) => {
+    setActiveList(id);
+  };
+  const handleAddCardClose = (id) => {
+    setActiveList(null);
+  };
+
   const listComponents = lists
     ?.sort((a, b) => a.position - b.position)
-    .map((list) => <List key={list.id} id={list.id} />);
+    .map((list) => (
+      <List
+        key={list.id}
+        id={list.id}
+        onAddCardClick={handleAddCardClick}
+        onAddCardClose={handleAddCardClose}
+        activeList={activeList === list.id}
+      />
+    ));
 
   useEffect(() => {
     if (boardId) {
