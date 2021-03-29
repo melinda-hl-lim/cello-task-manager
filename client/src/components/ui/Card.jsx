@@ -120,7 +120,7 @@ const Card = () => {
                     22 minutes ago - <span className="link">Edit</span> -{" "}
                     <span className="link">Delete</span>
                   </small>
-                  <div className="comment">
+                  {/* <div className="comment">
                     <label>
                       <textarea required="" rows="1">
                         The activities have not been implemented yet.
@@ -140,7 +140,7 @@ const Card = () => {
                         <i className="x-icon icon"></i>
                       </div>
                     </label>
-                  </div>
+                  </div> */}
                 </li>
                 <li>
                   <div className="member-container">

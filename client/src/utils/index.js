@@ -32,6 +32,10 @@ export const howSoon = (dueDate) => {
   }
 }
 
+export const relativeTime = (dateTime) => {
+  return moment(dateTime).fromNow();
+}
+
 export const pastDue = (dueDate) => {
   const difference = Date.now() - new Date(dueDate).getTime();
 

@@ -1,16 +1,16 @@
 const Card = require("../models/card");
 const HttpError = require("../models/httpError");
 const { validationResult } = require("express-validator");
-require('../models/comment');
-require('../models/action');
+const Comment = require('../models/comment');
+const Action = require('../models/action');
 
 const getCard = (req, res, next) => {
   const id = req.params.id;
   Card
     .findById(id)
-    .populate(['comments','actions'])
+    .populate(['comments', 'actions'])
     .then((card) => {
-      res.json({card})
+      res.json({ card })
     })
     .catch((err) => {
       console.log(err)
@@ -25,7 +25,7 @@ const createCard = (req, res, next) => {
     Card.create(req.body)
       .then((card) => {
         Card.findById(card.id).then(card => {
-        req.card = card;
+          req.card = card;
           next();
         })
       })

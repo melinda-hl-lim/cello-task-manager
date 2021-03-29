@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
+import Action from './Action';
+import Comment from './Comment';
 import { fetchCard } from "../../actions/CardActions";
 import { longDate, howSoon, pastDue } from "../../utils";
 
@@ -21,7 +23,7 @@ const Card = () => {
   if (!card || !list) {
     return null;
   }
-
+  console.log(card);
   // TODO: write this.
   const handleCloseModal = () => {
     return
@@ -50,6 +52,22 @@ const Card = () => {
   </li>
   ) : null;
 
+  const commentsAndActions = card.comments.concat(card.actions)
+    .sort((item1, item2) => item1.createdAt - item2.createdAt)
+    .map((item) => {
+      if (item.description) { // is action
+        return (<Action 
+                  key={item.id}
+                  action={item}
+                />)
+      } else { //is comment
+        return (<Comment 
+                  key={item.id}
+                  comment={item}
+                />)
+      }
+    })
+
   return (
     <div id="modal-container">
       <div className="screen"></div>
@@ -71,43 +89,28 @@ const Card = () => {
           <ul className="modal-outer-list">
             <li className="details-section">
               <ul className="modal-details-list">
+
                 <li className="labels-section">
                   <h3>Labels</h3>
                   { labelsComponents }
-                  {/* <div className="member-container">
-                    <div className="green label colorblindable"></div>
-                  </div>
-                  <div className="member-container">
-                    <div className="yellow label colorblindable"></div>
-                  </div>
-                  <div className="member-container">
-                    <div className="orange label colorblindable"></div>
-                  </div>
-                  <div className="member-container">
-                    <div className="blue label colorblindable"></div>
-                  </div>
-                  <div className="member-container">
-                    <div className="purple label colorblindable"></div>
-                  </div>
-                  <div className="member-container">
-                    <div className="red label colorblindable"></div>
-                  </div> */}
                   <div className="member-container">
                     <i className="plus-icon sm-icon"></i>
                   </div>
                 </li>
+
                 <br />
                 
                 {dueDateComponent}
 
               </ul>
+
               <form className="description">
                 <p>Description</p>
                 <span id="description-edit" className="link">
                   Edit
                 </span>
                 <p className="textarea-overlay">
-                  Cards have a symbol to indicate if they contain a description.
+                  {card.description}
                 </p>
                 <p id="description-edit-options" className="hidden">
                   You have unsaved edits on this field.{" "}
@@ -116,12 +119,14 @@ const Card = () => {
                 </p>
               </form>
             </li>
+
             <li className="comment-section">
               <h2 className="comment-icon icon">Add Comment</h2>
               <div>
                 <div className="member-container">
                   <div className="card-member">TP</div>
                 </div>
+                
                 <div className="comment">
                   <label>
                     <textarea
@@ -144,59 +149,21 @@ const Card = () => {
                     </div>
                   </label>
                 </div>
+
               </div>
             </li>
+
             <li className="activity-section">
               <h2 className="activity-icon icon">Activity</h2>
               <ul className="horiz-list">
                 <li className="not-implemented">Show Details</li>
               </ul>
+
               <ul className="modal-activity-list">
-                <li>
-                  <div className="member-container">
-                    <div className="card-member">TP</div>
-                  </div>
-                  <h3>Taylor Peat</h3>
-                  <div className="comment static-comment">
-                    <span>The activities are not functional.</span>
-                  </div>
-                  <small>
-                    22 minutes ago - <span className="link">Edit</span> -{" "}
-                    <span className="link">Delete</span>
-                  </small>
-                  <div className="comment">
-                    <label>
-                      <textarea required="" rows="1">
-                        The activities have not been implemented yet.
-                      </textarea>
-                      <div>
-                        <a className="light-button card-icon sm-icon"></a>
-                        <a className="light-button smiley-icon sm-icon"></a>
-                        <a className="light-button email-icon sm-icon"></a>
-                      </div>
-                      <div>
-                        <p>You haven&apos;t typed anything!</p>
-                        <input
-                          type="submit"
-                          className="button not-implemented"
-                          value="Save"
-                        />
-                        <i className="x-icon icon"></i>
-                      </div>
-                    </label>
-                  </div>
-                </li>
-                <li>
-                  <div className="member-container">
-                    <div className="card-member small-size">VR</div>
-                  </div>
-                  <p>
-                    <span className="member-name">Victor Reyes</span> changed
-                    the background of this board{" "}
-                    <small>yesterday at 4:53 PM</small>
-                  </p>
-                </li>
-                <li className="activity-comment">
+
+                {commentsAndActions}
+                
+                {/* <li className="activity-comment">
                   <div className="member-container">
                     <div className="card-member">VR</div>
                   </div>
@@ -229,7 +196,7 @@ const Card = () => {
                       </div>
                     </label>
                   </div>
-                </li>
+                </li> */}
               </ul>
             </li>
           </ul>
