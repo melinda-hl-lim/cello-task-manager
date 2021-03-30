@@ -24,6 +24,7 @@ const Card = () => {
   const dispatch = useDispatch();
 
   const [cardTitle, setCardTitle] = useState(card?.title);
+  const [saveCommentEnabled, setSaveCommentEnabled] = useState(true);
 
   useEffect(() => {
     if (!card?.actions) {
@@ -116,12 +117,16 @@ const Card = () => {
     setCommentText(e.target.value);
   };
 
-  const handleSubmitComment = (e) => {
-    dispatch(
-      createComment(card.id, commentText, () => {
-        setCommentText("");
-      })
-    );
+  const handleSubmitComment = () => {
+    if (saveCommentEnabled && commentText) {
+      setSaveCommentEnabled(false);
+      dispatch(
+        createComment(card.id, commentText, () => {
+          setCommentText("");
+          setSaveCommentEnabled(true);
+        })
+      );
+    }
   };
 
   return (
