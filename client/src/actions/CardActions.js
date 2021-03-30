@@ -58,3 +58,21 @@ export function updateCard(card, callback) {
     });
   };
 }
+
+export function createCommentRequest() {
+  return { type: types.CREATE_COMMENT_REQUEST };
+}
+export function createCommentSuccess(comment) {
+  return { type: types.CREATE_COMMENT_SUCCESS, payload: { comment } };
+}
+export function createComment(cardId, commentText, callback) {
+  return function (dispatch) {
+    dispatch(createCommentRequest());
+    apiClient.createComment(cardId, commentText, ({ comment }) => {
+      dispatch(createCommentSuccess(comment));
+      if (callback) {
+        callback(comment);
+      }
+    });
+  };
+}

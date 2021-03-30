@@ -30,6 +30,17 @@ export default function cards(state = [], { type, payload }) {
       return [...filterCardsByCardId(state, payload.card.id), payload.card];
     case types.FETCH_CARD_REQUEST:
       return state;
+    case types.CREATE_COMMENT_SUCCESS:
+      return state.map((card) => {
+        if (card.id === payload.comment.cardId) {
+          return {
+            ...card,
+            comments: [...card.comments, payload.comment],
+          };
+        } else {
+          return card;
+        }
+      });
     case types.UPDATE_CARD_SUCCESS:
       return state
         .filter((card) => card.id !== payload.card.id)

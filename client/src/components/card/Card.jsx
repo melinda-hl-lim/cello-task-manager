@@ -4,12 +4,17 @@ import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import Action from "./Action";
 import Comment from "./Comment";
-import { fetchCard, updateCard } from "../../actions/CardActions";
+import {
+  fetchCard,
+  updateCard,
+  createComment,
+} from "../../actions/CardActions";
 import { longDate, howSoon, pastDue } from "../../utils";
 
 const Card = () => {
   const { id } = useParams();
   const history = useHistory();
+  const [commentText, setCommentText] = useState("");
   const card = useSelector((state) =>
     state.cards.find((card) => card.id === id)
   );
@@ -107,6 +112,18 @@ const Card = () => {
     saveTitle();
   };
 
+  const handleChangeCommentText = (e) => {
+    setCommentText(e.target.value);
+  };
+
+  const handleSubmitComment = (e) => {
+    dispatch(
+      createComment(card.id, commentText, () => {
+        setCommentText("");
+      })
+    );
+  };
+
   return (
     <div id="modal-container">
       <div className="screen"></div>
@@ -176,7 +193,9 @@ const Card = () => {
                       required=""
                       rows="1"
                       placeholder="Write a comment..."
-                    ></textarea>
+                      value={commentText}
+                      onChange={handleChangeCommentText}
+                    />
                     <div>
                       <a className="light-button card-icon sm-icon"></a>
                       <a className="light-button smiley-icon sm-icon"></a>
@@ -186,8 +205,11 @@ const Card = () => {
                     <div>
                       <input
                         type="submit"
-                        className="button not-implemented"
+                        className={`button${
+                          commentText ? "" : " not-implemented"
+                        }`}
                         value="Save"
+                        onClick={handleSubmitComment}
                       />
                     </div>
                   </label>
@@ -201,44 +223,7 @@ const Card = () => {
                 <li className="not-implemented">Show Details</li>
               </ul>
 
-              <ul className="modal-activity-list">
-                {commentsAndActions}
-
-                {/* <li className="activity-comment">
-                  <div className="member-container">
-                    <div className="card-member">VR</div>
-                  </div>
-                  <h3>Victor Reyes</h3>
-                  <div className="comment static-comment">
-                    <span>Example of a comment.</span>
-                  </div>
-                  <small>
-                    22 minutes ago - <span className="link">Edit</span> -{" "}
-                    <span className="link">Delete</span>
-                  </small>
-                  <div className="comment">
-                    <label>
-                      <textarea required="" rows="1">
-                        Example of a comment.
-                      </textarea>
-                      <div>
-                        <a className="light-button card-icon sm-icon"></a>
-                        <a className="light-button smiley-icon sm-icon"></a>
-                        <a className="light-button email-icon sm-icon"></a>
-                      </div>
-                      <div>
-                        <p>You haven&apos;t typed anything!</p>
-                        <input
-                          type="submit"
-                          className="button not-implemented"
-                          value="Save"
-                        />
-                        <i className="x-icon icon"></i>
-                      </div>
-                    </label>
-                  </div>
-                </li> */}
-              </ul>
+              <ul className="modal-activity-list">{commentsAndActions}</ul>
             </li>
           </ul>
         </section>

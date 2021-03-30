@@ -50,6 +50,17 @@ const updateCard = (req, res, next) => {
   }
 };
 
+const addCommentToCard = (req, res, next) => {
+  Card.findByIdAndUpdate(
+    req.body.cardId,
+    { $addToSet: { comments: req.comment.id } },
+    { new: true }
+  )
+    .then((updatedCard) => res.json({ comment: req.comment }))
+    .catch((err) => next(new HttpError("Could not add card to list", 500)));
+};
+
+exports.addCommentToCard = addCommentToCard;
 exports.getCard = getCard;
 exports.createCard = createCard;
 exports.updateCard = updateCard;

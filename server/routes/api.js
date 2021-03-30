@@ -3,9 +3,11 @@ const router = express.Router();
 const boardsController = require("../controllers/boardsController");
 const listsController = require("../controllers/listsController");
 const cardsController = require("../controllers/cardsController");
+const commentsController = require("../controllers/commentsController");
 const { validateBoard } = require("../validators/validators");
 const { validateList } = require("../validators/validators");
 const { validateCard } = require("../validators/validators");
+const { validateComment } = require("../validators/validators");
 
 router.get("/boards/:id", boardsController.getBoard);
 router.get("/boards", boardsController.getBoards);
@@ -29,4 +31,10 @@ router.post(
 );
 router.put("/cards/:id", validateCard, cardsController.updateCard);
 
+router.post(
+  "/comments",
+  validateComment,
+  commentsController.createComment,
+  cardsController.addCommentToCard
+);
 module.exports = router;
