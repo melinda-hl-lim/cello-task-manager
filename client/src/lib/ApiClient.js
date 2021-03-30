@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import * as routes from "../constants/ApiRoutes";
 
@@ -22,38 +21,38 @@ axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 axios.defaults.headers.common["Accept"] = "application/json";
 
 const apiClient = {
-  getBoards: function(callback) {
+  getBoards: function (callback) {
     return axios
       .get(routes.BOARDS_INDEX_URL)
       .then(unwrapData)
       .then(callback)
       .catch(logError);
   },
-  createBoard: function(board, callback) {
+  createBoard: function (board, callback) {
     return axios
       .post(routes.CREATE_BOARD_URL, board)
       .then(unwrapData)
       .then(callback)
       .catch(logError);
   },
-  getBoard: function(id, callback) {
+  getBoard: function (id, callback) {
     return axios
       .get(routes.getBoardUrl(id))
       .then(unwrapData)
       .then(callback)
       .catch(logError);
   },
-  createList: function(listTitle, boardId, callback) {
+  createList: function (listTitle, boardId, callback) {
     return axios
       .post(routes.CREATE_LIST_URL, {
         boardId: boardId,
-        title: listTitle
+        title: listTitle,
       })
       .then(unwrapData)
       .then(callback)
       .catch(logError);
   },
-  updateList: function(list, callback) {
+  updateList: function (list, callback) {
     return axios
       .put(routes.updateListUrl(list.id), {
         title: list.title,
@@ -63,24 +62,24 @@ const apiClient = {
       .then(callback)
       .catch(logError);
   },
-  createCard: function(cardTitle, listId, boardId, callback) {
+  createCard: function (cardTitle, listId, boardId, callback) {
     return axios
       .post(routes.CREATE_CARD_URL, {
         boardId: boardId,
         listId: listId,
-        title: cardTitle
+        title: cardTitle,
       })
       .then(unwrapData)
       .then(callback)
       .catch(logError);
   },
-  fetchCard: function(id, callback) {
+  fetchCard: function (id, callback) {
     return axios
       .get(routes.getCardUrl(id))
       .then(unwrapData)
       .then(callback)
       .catch(logError);
-  }
+  },
 };
 
 export default apiClient;
