@@ -5,12 +5,16 @@ export const CREATE_CARD_URL = "/api/cards";
 
 export const getBoardUrl = (id) => {
   return `/api/boards/${id}`;
-}
+};
 
 export const updateListUrl = (id) => {
   return `/api/lists/${id}`;
-}
+};
+
+export const updateCardUrl = (id) => {
+  return `/api/cards/${id}`;
+};
 
 export const getCardUrl = (id) => {
-  return `/api/cards/${id}`
-}
+  return `/api/cards/${id}`;
+};

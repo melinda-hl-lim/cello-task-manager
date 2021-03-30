@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import Action from "./Action";
 import Comment from "./Comment";
-import { fetchCard } from "../../actions/CardActions";
+import { fetchCard, updateCard } from "../../actions/CardActions";
 import { longDate, howSoon, pastDue } from "../../utils";
 
 const Card = () => {
@@ -18,16 +18,21 @@ const Card = () => {
   );
   const dispatch = useDispatch();
 
+  const [cardTitle, setCardTitle] = useState(card?.title);
+
   useEffect(() => {
     if (!card?.actions) {
       dispatch(fetchCard(id));
+    }
+    if (card) {
+      setCardTitle(card.title);
     }
   }, [dispatch, id, card]);
 
   if (!card || !list || !card.actions) {
     return null;
   }
-  // TODO: write this.
+
   const handleCloseModal = () => {
     history.push(`/boards/${card.boardId}`);
     return;
@@ -40,6 +45,10 @@ const Card = () => {
       </div>
     );
   });
+
+  const handleCardTitleChange = (e) => {
+    setCardTitle(e.target.value);
+  };
 
   const dueDateComponent = card.dueDate ? (
     <li className="due-date-section">
@@ -73,6 +82,31 @@ const Card = () => {
       }
     });
 
+  const saveTitle = () => {
+    dispatch(
+      updateCard(
+        {
+          ...card,
+          title: cardTitle,
+        },
+        (updatedCard) => {
+          setCardTitle(updatedCard.title);
+        }
+      )
+    );
+  };
+
+  const handleKeyDown = (e) => {
+    // if key is enter, save title
+    if (e.key === "Enter") {
+      saveTitle();
+    }
+  };
+
+  const handleBlur = () => {
+    saveTitle();
+  };
+
   return (
     <div id="modal-container">
       <div className="screen"></div>
@@ -81,9 +115,14 @@ const Card = () => {
 
         <header>
           <i className="card-icon icon .close-modal"></i>
-          <textarea className="list-title" style={{ height: "45px" }}>
-            {card.title}
-          </textarea>
+          <textarea
+            className="list-title"
+            style={{ height: "45px" }}
+            value={cardTitle}
+            onChange={handleCardTitleChange}
+            onKeyDown={handleKeyDown}
+            onBlur={handleBlur}
+          />
           <p>
             in list{" "}
             <a className="link" onClick={handleCloseModal}>

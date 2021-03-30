@@ -33,7 +33,7 @@ const Board = () => {
   const handleAddCardClick = (id) => {
     setActiveList(id);
   };
-  const handleAddCardClose = (id) => {
+  const handleAddCardClose = () => {
     setActiveList(null);
   };
 
