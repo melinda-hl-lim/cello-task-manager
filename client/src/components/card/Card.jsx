@@ -25,6 +25,8 @@ const Card = () => {
 
   const [cardTitle, setCardTitle] = useState(card?.title);
   const [saveCommentEnabled, setSaveCommentEnabled] = useState(true);
+  const [editing, setEditing] = useState(false);
+  const [descriptionText, setDescriptionText] = useState("");
 
   useEffect(() => {
     if (!card?.actions) {
@@ -32,6 +34,7 @@ const Card = () => {
     }
     if (card) {
       setCardTitle(card.title);
+      setDescriptionText(card.description);
     }
   }, [dispatch, id, card]);
 
@@ -129,6 +132,33 @@ const Card = () => {
     }
   };
 
+  const handleEditDescription = () => {
+    setEditing(true);
+  }
+
+  const handleSaveDescription = (e) => {
+    e.preventDefault();
+    dispatch(updateCard({
+        ...card,
+        description: descriptionText,
+      }, (updatedCard) => {
+      setDescriptionText(updatedCard.description);
+      setEditing(false);
+    }));
+  }
+
+  const handleChangeDescription = (e) => {
+    setDescriptionText(e.target.value);
+  }
+
+  const handleCloseDescription = () => {
+    setEditing(false);
+  }
+
+  const handleDiscardEdits = () => {
+    setDescriptionText(card.description);
+  }
+
   return (
     <div id="modal-container">
       <div className="screen"></div>
@@ -173,15 +203,31 @@ const Card = () => {
 
               <form className="description">
                 <p>Description</p>
-                <span id="description-edit" className="link">
-                  Edit
-                </span>
-                <p className="textarea-overlay">{card.description}</p>
-                <p id="description-edit-options" className="hidden">
-                  You have unsaved edits on this field.{" "}
-                  <span className="link">View edits</span> -{" "}
-                  <span className="link">Discard</span>
-                </p>
+                {editing ? 
+                  <>
+                    <textarea className="textarea-toggle" rows="1" 
+                      value={descriptionText} onChange={handleChangeDescription} autoFocus />
+                    <div>
+                      <div className="button" value="Save" onClick={handleSaveDescription}>
+                        Save
+                      </div>
+                      <i className="x-icon icon" onClick={handleCloseDescription}></i>
+                    </div>
+                  </>
+                : 
+                  <>
+                  <span id="description-edit" className="link" onClick={handleEditDescription}>
+                    Edit
+                  </span>
+                  <p className="textarea-overlay">{card.description}</p>
+                  <p id="description-edit-options" className={card.description === descriptionText ? "hidden" : ""}>
+                    You have unsaved edits on this field.{" "}
+                    <span className="link" onClick={handleEditDescription}>View edits</span> -{" "}
+                    <span className="link" onClick={handleDiscardEdits}>Discard</span>
+                  </p>
+                  </>
+                }
+
               </form>
             </li>
 

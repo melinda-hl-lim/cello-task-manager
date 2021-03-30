@@ -65,7 +65,17 @@ const apiClient = {
   updateCard: function (card, callback) {
     console.log('card: ', card);
     return axios
-      .put(routes.updateCardUrl(card.id), card)
+      .put(routes.updateCardUrl(card.id), {
+        title: card.title,
+        description: card.description,
+        labels: card.labels,
+        dueDate: card.dueDate,
+        completed: card.completed,
+        archived: card.archived,
+        position: card.position,
+        listId: card.listId,
+        boardId: card.boardId
+      })
       .then(unwrapData)
       .then(callback)
       .catch(logError);

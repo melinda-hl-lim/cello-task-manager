@@ -38,9 +38,12 @@ const createCard = (req, res, next) => {
 
 const updateCard = (req, res, next) => {
   const errors = validationResult(req);
+        console.log('req.body: ', req.body);
 
   if (errors.isEmpty()) {
-    Card.findByIdAndUpdate(req.params.id, req.body, { new: true }).then(
+    Card.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .populate(["comments", "actions"])
+    .then(
       (updatedCard) => {
         res.json({ card: updatedCard });
       }
