@@ -8,7 +8,7 @@ const CardPopover = ({ type, attachedTo, card, onClose }) => {
 
   switch (type) {
     case "labels":
-      child = <Labels labels={card.labels} onClose={onClose}/>;
+      child = <Labels card={card} onClose={onClose}/>;
       break;
     case "due-date":
       child = <DueDatePicker card={card} onClose={onClose}/>;

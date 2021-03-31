@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { toggleCardLabel } from "../../actions/CardActions";
 
-const Labels = ({ labels, onClose }) => {
+const Labels = ({ card, onClose }) => {
   const ALL_LABELS = ["green", "yellow", "orange", "red", "purple", "blue"];
+  const dispatch = useDispatch();
+
+  const handleToggleLabel = (label) => {
+    return () => {
+      dispatch(toggleCardLabel(card, label))
+    }
+  }
+
   const labelComponents = ALL_LABELS.map((label, idx) => (
-    <li key={label}>
-      <div className={`${label} colorblindable`} data-id={idx + 1}>
-        { labels.includes(label) ? <i className="check-icon sm-icon"></i> : null }
+    <li key={label} onClick={handleToggleLabel(label)}>
+      <div className={`${label} colorblindable`} data-id={idx}>
+        { card.labels.includes(label) ? <i className="check-icon sm-icon"></i> : null }
       </div>
       <div className={`label-background ${label}`}></div>
       <div className="label-background-overlay"></div>

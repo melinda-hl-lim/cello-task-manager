@@ -1,5 +1,6 @@
 import apiClient from "../lib/ApiClient";
 import * as types from "../constants/ActionTypes";
+import { Callbacks } from "jquery";
 
 export function createCardRequest() {
   return { type: types.CREATE_CARD_REQUEST };
@@ -57,6 +58,34 @@ export function updateCard(card, callback) {
       }
     });
   };
+}
+
+export function toggleCardLabelRequest(card) {
+  return { type: types.TOGGLE_CARD_LABEL_REQUEST, payload: { card } };
+}
+
+export function toggleCardLabel(card, label, callback) {
+  return function (dispatch) {
+
+    const toggleLabel = (label) => {
+      if (card.labels.includes(label)) {
+        return card.labels.filter((l) => l !== label);
+      } else {
+        return card.labels.concat(label);
+      }
+    }
+
+    const newCard = {...card, labels: toggleLabel(label)};
+
+    dispatch(toggleCardLabelRequest(newCard));
+    apiClient.updateCard(newCard, ({ card: updatedCard }) => {
+      dispatch(updateCardSuccess(updatedCard));
+      
+      if (callback) {
+        callback(updatedCard);
+      }
+    })
+  }
 }
 
 export function createCommentRequest() {
