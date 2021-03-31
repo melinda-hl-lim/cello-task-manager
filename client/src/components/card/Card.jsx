@@ -10,11 +10,14 @@ import {
   createComment,
 } from "../../actions/CardActions";
 import { longDate, howSoon, pastDue } from "../../utils";
+import CardPopover from "./CardPopover";
 
 const Card = () => {
   const { id } = useParams();
   const history = useHistory();
   const [commentText, setCommentText] = useState("");
+  const [whichPopover, setWhichPopover] = useState("");
+  const [attachedTo, setAttachedTo] = useState(null);
   const card = useSelector((state) =>
     state.cards.find((card) => card.id === id)
   );
@@ -55,6 +58,13 @@ const Card = () => {
     );
   });
 
+  const handleSetPopover = (type) => {
+    return (e) => {
+      setAttachedTo(e.target);
+      setWhichPopover(type);
+    };
+  };
+
   const handleCardTitleChange = (e) => {
     setCardTitle(e.target.value);
   };
@@ -62,7 +72,11 @@ const Card = () => {
   const dueDateComponent = card.dueDate ? (
     <li className="due-date-section">
       <h3>Due Date</h3>
-      <div id="dueDateDisplay" className={howSoon(card.dueDate)}>
+      <div
+        id="dueDateDisplay"
+        className={howSoon(card.dueDate)}
+        onClick={handleSetPopover("due-date")}
+      >
         <input
           id="dueDateCheckbox"
           type="checkbox"
@@ -134,30 +148,35 @@ const Card = () => {
 
   const handleEditDescription = () => {
     setEditing(true);
-  }
+  };
 
   const handleSaveDescription = (e) => {
     e.preventDefault();
-    dispatch(updateCard({
-        ...card,
-        description: descriptionText,
-      }, (updatedCard) => {
-      setDescriptionText(updatedCard.description);
-      setEditing(false);
-    }));
-  }
+    dispatch(
+      updateCard(
+        {
+          ...card,
+          description: descriptionText,
+        },
+        (updatedCard) => {
+          setDescriptionText(updatedCard.description);
+          setEditing(false);
+        }
+      )
+    );
+  };
 
   const handleChangeDescription = (e) => {
     setDescriptionText(e.target.value);
-  }
+  };
 
   const handleCloseDescription = () => {
     setEditing(false);
-  }
+  };
 
   const handleDiscardEdits = () => {
     setDescriptionText(card.description);
-  }
+  };
 
   return (
     <div id="modal-container">
@@ -192,7 +211,10 @@ const Card = () => {
                   <h3>Labels</h3>
                   {labelsComponents}
                   <div className="member-container">
-                    <i className="plus-icon sm-icon"></i>
+                    <i
+                      className="plus-icon sm-icon"
+                      onClick={handleSetPopover("labels")}
+                    ></i>
                   </div>
                 </li>
 
@@ -203,31 +225,56 @@ const Card = () => {
 
               <form className="description">
                 <p>Description</p>
-                {editing ? 
+                {editing ? (
                   <>
-                    <textarea className="textarea-toggle" rows="1" 
-                      value={descriptionText} onChange={handleChangeDescription} autoFocus />
+                    <textarea
+                      className="textarea-toggle"
+                      rows="1"
+                      value={descriptionText}
+                      onChange={handleChangeDescription}
+                      autoFocus
+                    />
                     <div>
-                      <div className="button" value="Save" onClick={handleSaveDescription}>
+                      <div
+                        className="button"
+                        value="Save"
+                        onClick={handleSaveDescription}
+                      >
                         Save
                       </div>
-                      <i className="x-icon icon" onClick={handleCloseDescription}></i>
+                      <i
+                        className="x-icon icon"
+                        onClick={handleCloseDescription}
+                      ></i>
                     </div>
                   </>
-                : 
+                ) : (
                   <>
-                  <span id="description-edit" className="link" onClick={handleEditDescription}>
-                    Edit
-                  </span>
-                  <p className="textarea-overlay">{card.description}</p>
-                  <p id="description-edit-options" className={card.description === descriptionText ? "hidden" : ""}>
-                    You have unsaved edits on this field.{" "}
-                    <span className="link" onClick={handleEditDescription}>View edits</span> -{" "}
-                    <span className="link" onClick={handleDiscardEdits}>Discard</span>
-                  </p>
+                    <span
+                      id="description-edit"
+                      className="link"
+                      onClick={handleEditDescription}
+                    >
+                      Edit
+                    </span>
+                    <p className="textarea-overlay">{card.description}</p>
+                    <p
+                      id="description-edit-options"
+                      className={
+                        card.description === descriptionText ? "hidden" : ""
+                      }
+                    >
+                      You have unsaved edits on this field.{" "}
+                      <span className="link" onClick={handleEditDescription}>
+                        View edits
+                      </span>{" "}
+                      -{" "}
+                      <span className="link" onClick={handleDiscardEdits}>
+                        Discard
+                      </span>
+                    </p>
                   </>
-                }
-
+                )}
               </form>
             </li>
 
@@ -290,7 +337,7 @@ const Card = () => {
             <li className="checklist-button">
               <i className="checklist-icon sm-icon"></i>Checklist
             </li>
-            <li className="date-button not-implemented">
+            <li className="date-button" onClick={handleSetPopover("due-date")}>
               <i className="clock-icon sm-icon"></i>Due Date
             </li>
             <li className="attachment-button not-implemented">
@@ -319,6 +366,7 @@ const Card = () => {
           </ul>
         </aside>
       </div>
+      <CardPopover type={whichPopover} card={card} attachedTo={attachedTo} />
     </div>
   );
 };
