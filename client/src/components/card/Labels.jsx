@@ -5,7 +5,7 @@ const Labels = ({ labels }) => {
   const labelComponents = ALL_LABELS.map((label, idx) => (
     <li key={label}>
       <div className={`${label} colorblindable`} data-id={idx + 1}>
-        <i className="check-icon sm-icon"></i>
+        { labels.includes(label) ? <i className="check-icon sm-icon"></i> : null }
       </div>
       <div className={`label-background ${label}`}></div>
       <div className="label-background-overlay"></div>
