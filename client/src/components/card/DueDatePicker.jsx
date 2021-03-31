@@ -2,8 +2,13 @@ import Pikaday from "pikaday";
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 
-const DueDatePicker = ({ card }) => {
+const DueDatePicker = ({ card, onClose }) => {
   const [picker, setPicker] = useState(null);
+
+  const handleClose = (e) => {
+    e.preventDefault();
+    onClose();
+  }
 
   useEffect(() => {
     if (!picker) {
@@ -58,7 +63,7 @@ const DueDatePicker = ({ card }) => {
     <>
       <header>
         <span>Change due date</span>
-        <a href="#" className="icon-sm icon-close"></a>
+        <a href="#" className="icon-sm icon-close" onClick={handleClose}></a>
       </header>
       <div className="content">
         <form>

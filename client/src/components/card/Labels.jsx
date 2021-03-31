@@ -1,6 +1,6 @@
 import React from "react";
 
-const Labels = ({ labels }) => {
+const Labels = ({ labels, onClose }) => {
   const ALL_LABELS = ["green", "yellow", "orange", "red", "purple", "blue"];
   const labelComponents = ALL_LABELS.map((label, idx) => (
     <li key={label}>
@@ -17,7 +17,7 @@ const Labels = ({ labels }) => {
     <div id="add-options-labels-dropdown">
       <header>
         <span>Labels</span>
-        <a href="#" className="icon-sm icon-close"></a>
+        <a href="#" className="icon-sm icon-close" onClick={onClose}></a>
       </header>
       <div className="content">
         <input

@@ -50,6 +50,10 @@ const Card = () => {
     return;
   };
 
+  const handleClosePopover = () => {
+    setWhichPopover("");
+  }
+
   const labelsComponents = card.labels.map((label) => {
     return (
       <div className="member-container" key={label}>
@@ -366,7 +370,7 @@ const Card = () => {
           </ul>
         </aside>
       </div>
-      <CardPopover type={whichPopover} card={card} attachedTo={attachedTo} />
+      <CardPopover type={whichPopover} card={card} attachedTo={attachedTo} onClose={handleClosePopover} />
     </div>
   );
 };
