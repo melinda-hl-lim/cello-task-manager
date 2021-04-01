@@ -42,8 +42,8 @@ export default function cards(state = [], { type, payload }) {
         }
       });
     case types.TOGGLE_CARD_LABEL_REQUEST:
-      // Expects this case to fall through to UPDATE_CARD_SUCCESS
-      
+    // Expects this case to fall through to UPDATE_CARD_SUCCESS
+
     // eslint-disable-next-line no-fallthrough
     case types.UPDATE_CARD_SUCCESS:
       return state

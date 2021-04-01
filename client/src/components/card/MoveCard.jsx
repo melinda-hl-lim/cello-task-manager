@@ -1,38 +1,96 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchListsFromBoard, fetchBoards } from "../../actions/BoardActions";
-
-const MoveCard = ({ card }) => {
+import { fetchBoard, fetchBoards } from "../../actions/BoardActions";
+import { updateCard } from "../../actions/CardActions";
+import { fetchListsFromBoard } from "../../actions/ListActions";
+//  fetchListsFromBoard,
+const MoveCard = ({ card, onClose }) => {
   const dispatch = useDispatch();
-  const boards = useSelector(state => state.boards);
-  
+  const boards = useSelector((state) => state.boards);
   const [selectedBoard, setSelectedBoard] = useState(null);
+  const [selectedList, setSelectedList] = useState(null);
+  const lists = useSelector((state) =>
+    state.lists.filter((list) => list.boardId === selectedBoard?.id)
+  );
 
-  const boardsComponent = boards.map((board) => 
-        <option key={board.id} value={board.id} selected={card.boardId === board.id ? "selected" : ""}>
-          {board.title} {card.boardId === board.id ? "(current)" : ""}
-        </option>
+  const boardsComponents = boards.map((board) => (
+    <option key={board.id} value={board.id}>
+      {board.title} {card.boardId === board.id ? "(current)" : ""}
+    </option>
+  ));
+
+  const listsComponents = lists.map((list) => (
+    <option key={list.id} value={list.id}>
+      {list.title} {card.listId === list.id ? "(current)" : ""}
+    </option>
+  ));
+
+  const fetchBoardCallback = useCallback(
+    (id, callback) => {
+      dispatch(fetchBoard(id, callback));
+    },
+    [dispatch]
+  );
+  const fetchBoardsCallback = useCallback(
+    (id, callback) => {
+      dispatch(fetchBoards(callback));
+    },
+    [dispatch]
   );
 
   useEffect(() => {
-    dispatch(fetchBoards((boards) => {
-      boards.forEach(board => {
-        dispatch(fetchListsFromBoard(board.id));
-      })
-    }))
-  }, [dispatch]);
+    fetchBoardsCallback();
+  }, [fetchBoardsCallback]);
+
+  // When a board is selected
+  useEffect(() => {
+    if (selectedBoard) {
+      fetchBoardCallback(selectedBoard.id, (board) => {
+        setSelectedList(board.lists[0] || null);
+      });
+    }
+  }, [fetchBoardCallback, selectedBoard]);
+
+  // Setting the inital selected board
+  useEffect(() => {
+    if (boards && !selectedBoard) {
+      setSelectedBoard(boards.find((board) => board.id === card.boardId));
+    }
+  }, [card, boards, selectedBoard]);
 
   useEffect(() => {
-    setSelectedBoard(boards?.find(board => board.id === card.boardId));
-  }, [card, boards]);
+    if (lists && !selectedList) {
+      setSelectedList(lists.find((list) => list.id === card.listId));
+    }
+  }, [card, lists, selectedList]);
 
-  if (!boards || !selectedBoard) {
+  if (!boards || !selectedBoard || !selectedList) {
     return null;
   }
 
   const handleSelectBoardChange = (e) => {
-    setSelectedBoard(boards.find(board => board.id === e.target.value));
-  }
+    setSelectedBoard(boards.find((board) => board.id === e.target.value));
+  };
+
+  const handleMoveCard = (e) => {
+    e.preventDefault();
+    // update the card
+    dispatch(
+      updateCard(
+        {
+          ...card,
+          listId: selectedList.id,
+          boardId: selectedBoard.id,
+        },
+        () => {
+          onClose();
+        }
+      )
+    );
+    dispatch(removeCardFromList());
+    // update the old list
+    // update the new list
+  };
 
   return (
     <div>
@@ -45,31 +103,23 @@ const MoveCard = ({ card }) => {
           <span className="label">Board</span>
           <span className="value js-board-value">{selectedBoard.title}</span>
           <label>Board</label>
-          <select onChange={handleSelectBoardChange}>
-            {boardsComponent} 
+          <select value={selectedBoard.id} onChange={handleSelectBoardChange}>
+            {boardsComponents}
           </select>
         </div>
         <div>
           <div className="button-link setting list">
             <span className="label">List</span>
-            <span className="value js-list-value">Intermediate</span>
+            <span className="value js-list-value">{selectedList.title}</span>
             <label>List</label>
-            <select>
-              <option value="1">Basics</option>
-              <option value="2" selected="selected">
-                Intermediate (current)
-              </option>
-              <option value="3">Advanced</option>
-            </select>
+            <select>{listsComponents}</select>
           </div>
-          <div className="button-link setting position">
+          {/* <div className="button-link setting position">
             <span className="label">Position</span>
             <span className="value">1</span>
             <label>Position</label>
             <select>
-              <option value="top" selected="selected">
-                1 (current)
-              </option>
+              <option value="top">1 (current)</option>
               <option value="98303">2</option>
               <option value="163839">3</option>
               <option value="212991">4</option>
@@ -78,15 +128,15 @@ const MoveCard = ({ card }) => {
               <option value="311295">7</option>
               <option value="bottom">8</option>
             </select>
-          </div>
+          </div> */}
         </div>
 
-        <button className="button" type="submit">
+        <button className="button" type="submit" onClick={handleMoveCard}>
           Move
         </button>
       </div>
     </div>
   );
-}
+};
 
 export default MoveCard;
