@@ -8,7 +8,7 @@ const TopNav = () => {
       <ul>
         <li
           onClick={() => history.push("/")}
-          lassName="boards trello-icon icon"
+          className="boards trello-icon icon"
         >
           <span>Boards</span>
         </li>
