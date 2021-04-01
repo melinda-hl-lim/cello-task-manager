@@ -24,9 +24,12 @@ const CardTile = ({ id }) => {
             <p>{card.title}</p>
           </div>
           <div className="card-icons">
-            <i className={`clock-icon sm-icon ${cardStatus}`}>
-              {shortDate(card.dueDate)}
-            </i>
+            { card.dueDate ? 
+              <i className={`clock-icon sm-icon ${cardStatus}`}>
+                {shortDate(card.dueDate)}
+              </i>
+              : null 
+            }
             {card.description ? (
               <i className="description-icon sm-icon" />
             ) : null}

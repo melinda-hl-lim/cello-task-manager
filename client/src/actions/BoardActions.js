@@ -17,10 +17,16 @@ export function createBoardSuccess(board) {
   return { type: types.CREATE_BOARD_SUCCESS, payload: { board } };
 }
 
-export function fetchBoards() {
+export function fetchBoards(callback) {
   return function (dispatch) {
     dispatch(fetchBoardsRequest());
-    apiClient.getBoards((data) => dispatch(fetchBoardsSuccess(data.boards)));
+    apiClient.getBoards((data) => {
+      dispatch(fetchBoardsSuccess(data.boards));
+
+      if (callback) {
+        callback(data.boards);
+      }
+    });
   };
 }
 

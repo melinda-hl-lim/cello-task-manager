@@ -80,7 +80,7 @@ class DueDatePopover extends React.Component {
             <button className="button" type="submit">
               Save
             </button>
-            <button className="button red-button" type="reset">
+            <button className="button red-button" type="reset" >
               Remove
             </button>
           </form>

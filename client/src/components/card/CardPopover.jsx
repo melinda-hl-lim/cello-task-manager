@@ -2,6 +2,7 @@ import React from "react";
 import Popover from "../shared/Popover";
 import DueDatePicker from "./DueDatePicker";
 import Labels from "./Labels";
+import MoveCard from "./MoveCard";
 
 const CardPopover = ({ type, attachedTo, card, onClose }) => {
   let child;
@@ -12,6 +13,9 @@ const CardPopover = ({ type, attachedTo, card, onClose }) => {
       break;
     case "due-date":
       child = <DueDatePicker card={card} onClose={onClose}/>;
+      break;
+    case "move-card":
+      child = <MoveCard card={card} onClose={onClose}/>;
       break;
   }
 

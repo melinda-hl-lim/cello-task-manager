@@ -350,7 +350,7 @@ const Card = () => {
           </ul>
           <h2>Actions</h2>
           <ul>
-            <li className="move-button">
+            <li className="move-button" onClick={handleSetPopover("move-card")}>
               <i className="forward-icon sm-icon"></i>Move
             </li>
             <li className="copy-button">

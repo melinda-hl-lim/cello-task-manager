@@ -13,7 +13,6 @@ const filterLists = (lists, boardId) => {
   return lists.filter(list => list.boardId !== boardId);
 }
 
-
 export default function lists(state = [], {type, payload }) {
   switch(type) {
     case types.FETCH_BOARD_REQUEST:

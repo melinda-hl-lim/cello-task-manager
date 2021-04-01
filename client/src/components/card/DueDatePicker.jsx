@@ -1,13 +1,36 @@
 import Pikaday from "pikaday";
 import React, { useEffect, useState } from "react";
 import moment from "moment";
+import { useDispatch } from "react-redux";
+import { updateCard } from "../../actions/CardActions"
 
 const DueDatePicker = ({ card, onClose }) => {
+  const dispatch = useDispatch();
   const [picker, setPicker] = useState(null);
 
   const handleClose = (e) => {
     e.preventDefault();
     onClose();
+  }
+
+  const handleRemoveDueDate = () => {
+    dispatch(updateCard({
+      ...card,
+      dueDate: ""
+    }, () => {
+      onClose()
+    }));
+  }
+
+  const handleSaveDueDate = (e) => {
+    e.preventDefault();
+    const newDate = picker.getDate();
+    dispatch(updateCard({
+      ...card,
+      dueDate: newDate
+    }, () => {
+      onClose()
+    }));
   }
 
   useEffect(() => {
@@ -82,10 +105,10 @@ const DueDatePicker = ({ card, onClose }) => {
             </div>
             <div id="calendar-widget"></div>
           </div>
-          <button className="button" type="submit">
+          <button className="button" type="submit" onClick={handleSaveDueDate}>
             Save
           </button>
-          <button className="button red-button" type="reset">
+          <button className="button red-button" type="reset" onClick={handleRemoveDueDate}>
             Remove
           </button>
         </form>
