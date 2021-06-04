@@ -47,6 +47,13 @@ const createBoard = (req, res, next) => {
   }
 };
 
+const addListToBoard = (req, res, next) => {
+  Board.findByIdAndUpdate(req.body.boardId, { '$addToSet': { lists: req.list.id } }, { new: true })
+    .then(updatedBoard => res.json({ list: req.list }))
+    .catch(err => next(new HttpError("Could not add list to board", 500)))
+}
+
 exports.getBoards = getBoards;
 exports.getBoard = getBoard;
 exports.createBoard = createBoard;
+exports.addListToBoard = addListToBoard;
