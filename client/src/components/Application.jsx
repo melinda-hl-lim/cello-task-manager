@@ -14,10 +14,14 @@ import LabelsPopover from "./ui/LabelsPopover";
 import MoveCardPopover from "./ui/MoveCardPopover";
 import SingleBoard from "./ui/SingleBoard";
 
+import Board from "./board/Board";
+
 const Application = () => {
   return (
     <div>
       <TopNav />
+      <Route path="/boards/:id" component={Board} />
+
       <Route path="/" exact component={BoardsDashboardContainer} />
       <Route path="/ui" exact component={UISection} />
       <Route path="/ui/allBoards" component={AllBoards} />
