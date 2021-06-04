@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import Action from "./Action";
 import Comment from "./Comment";
+import * as cardActions from "../../actions/CardActions";
 import {
-  fetchCard,
   updateCard,
   createComment,
 } from "../../actions/CardActions";
@@ -31,28 +31,46 @@ const Card = () => {
   const [editing, setEditing] = useState(false);
   const [descriptionText, setDescriptionText] = useState("");
 
-  useEffect(() => {
-    if (!card?.actions) {
-      dispatch(fetchCard(id));
+  const fetchCard = useCallback(
+    (id) => {
+      if (!card?.actions) {
+      dispatch(cardActions.fetchCard(id));
     }
     if (card) {
       setCardTitle(card.title);
       setDescriptionText(card.description);
     }
-  }, [dispatch, id, card]);
+    },
+    [card, dispatch],
+  )
+
+  const handlePopover = useCallback(
+    (type) => {
+    return (e) => {
+      setAttachedTo(e.target);
+      setWhichPopover(type);
+    };
+    },
+    [],
+  )
+
+  useEffect(() => {
+    console.log("card1")
+    fetchCard(id)
+  }, [fetchCard, id]);
 
   if (!card || !list || !card.actions) {
     return null;
   }
 
-  const handleCloseModal = () => {
-    history.push(`/boards/${card.boardId}`);
-    return;
-  };
+  // const handleCloseModal = () => {
+  //   history.push(`/boards/${card.boardId}`);
+  //   return;
+  // };
 
-  const handleClosePopover = () => {
-    setWhichPopover("");
-  }
+  // const handleClosePopover = () => {
+  //   setWhichPopover("");
+  // }
 
   const labelsComponents = card.labels.map((label) => {
     return (
@@ -61,13 +79,6 @@ const Card = () => {
       </div>
     );
   });
-
-  const handleSetPopover = (type) => {
-    return (e) => {
-      setAttachedTo(e.target);
-      setWhichPopover(type);
-    };
-  };
 
   const handleCardTitleChange = (e) => {
     setCardTitle(e.target.value);
@@ -79,7 +90,7 @@ const Card = () => {
       <div
         id="dueDateDisplay"
         className={howSoon(card.dueDate)}
-        onClick={handleSetPopover("due-date")}
+        onClick={handlePopover("due-date")}
       >
         <input
           id="dueDateCheckbox"
@@ -186,7 +197,7 @@ const Card = () => {
     <div id="modal-container">
       <div className="screen"></div>
       <div id="modal">
-        <i className="x-icon icon close-modal" onClick={handleCloseModal}></i>
+        <i className="x-icon icon close-modal" ></i>
 
         <header>
           <i className="card-icon icon .close-modal"></i>
@@ -200,7 +211,7 @@ const Card = () => {
           />
           <p>
             in list{" "}
-            <a className="link" onClick={handleCloseModal}>
+            <a className="link" >
               {list.title}
             </a>
             <i className="sub-icon sm-icon"></i>
@@ -217,7 +228,7 @@ const Card = () => {
                   <div className="member-container">
                     <i
                       className="plus-icon sm-icon"
-                      onClick={handleSetPopover("labels")}
+                      onClick={handlePopover("labels")}
                     ></i>
                   </div>
                 </li>
@@ -341,7 +352,7 @@ const Card = () => {
             <li className="checklist-button">
               <i className="checklist-icon sm-icon"></i>Checklist
             </li>
-            <li className="date-button" onClick={handleSetPopover("due-date")}>
+            <li className="date-button" onClick={handlePopover("due-date")}>
               <i className="clock-icon sm-icon"></i>Due Date
             </li>
             <li className="attachment-button not-implemented">
@@ -350,7 +361,7 @@ const Card = () => {
           </ul>
           <h2>Actions</h2>
           <ul>
-            <li className="move-button" onClick={handleSetPopover("move-card")}>
+            <li className="move-button" onClick={handlePopover("move-card")}>
               <i className="forward-icon sm-icon"></i>Move
             </li>
             <li className="copy-button">
@@ -370,7 +381,7 @@ const Card = () => {
           </ul>
         </aside>
       </div>
-      <CardPopover type={whichPopover} card={card} attachedTo={attachedTo} onClose={handleClosePopover} />
+      <CardPopover type={whichPopover} card={card} attachedTo={attachedTo} />
     </div>
   );
 };
