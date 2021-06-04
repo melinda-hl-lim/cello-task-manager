@@ -14,11 +14,11 @@ export function updateListRequest() {
 }
 
 export function updateListSuccess(list) {
-  return { type: types.UPDATE_LIST_SUCCESS, payload: { list }};
+  return { type: types.UPDATE_LIST_SUCCESS, payload: { list } };
 }
 
 export function createList(list, boardId, callback) {
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(createListRequest());
     apiClient.createList(list, boardId, ({ list }) => {
       dispatch(createListSuccess(list));
@@ -31,7 +31,7 @@ export function createList(list, boardId, callback) {
 }
 
 export function updateList(list, callback) {
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(updateListRequest());
     apiClient.updateList(list, ({ list: updatedList }) => {
       dispatch(updateListSuccess(updatedList));
@@ -39,6 +39,27 @@ export function updateList(list, callback) {
       if (callback) {
         callback(updatedList);
       }
-    })
-  }
+    });
+  };
+}
+
+export function fetchListsFromBoardRequest() {
+  return { type: types.FETCH_LISTS_FROM_BOARD_REQUEST };
+}
+
+export function fetchListsFromBoardSuccess(board) {
+  return { type: types.FETCH_LISTS_FROM_BOARD_SUCCESS, payload: { board } };
+}
+
+export function fetchListsFromBoard(boardId, currentCardId, callback) {
+  return function (dispatch) {
+    dispatch(fetchListsFromBoardRequest());
+    apiClient.getBoard(boardId, ({ board }) => {
+      dispatch(fetchListsFromBoardSuccess(board, currentCardId));
+
+      if (callback) {
+        callback(board);
+      }
+    });
+  };
 }

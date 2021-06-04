@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useRouteMatch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBoard } from "../../actions/BoardActions";
 import List from "../list/List";
@@ -7,24 +7,53 @@ import AddList from "./AddList";
 import BoardHeader from "./BoardHeader";
 
 const Board = () => {
-  const { id } = useParams();
+  const { id: routeId } = useParams();
+  const [activeList, setActiveList] = useState(null);
   const dispatch = useDispatch();
+  const boardIdMatch = useRouteMatch("/boards/:id");
+  let boardId;
+  const state = useSelector((state) => state);
+  if (boardIdMatch) {
+    boardId = routeId;
+  } else {
+    const card = state?.cards?.find((card) => card?.id === routeId);
+    if (card) {
+      boardId = card.boardId;
+    }
+  }
 
   const board = useSelector((state) => {
-    return state.boards.find((board) => board.id === id);
+    return state.boards.find((board) => board.id === boardId);
   });
 
   const lists = useSelector((state) =>
     state.lists.filter((list) => list.boardId === board?.id)
   );
 
+  const handleAddCardClick = (id) => {
+    setActiveList(id);
+  };
+  const handleAddCardClose = () => {
+    setActiveList(null);
+  };
+
   const listComponents = lists
     ?.sort((a, b) => a.position - b.position)
-    .map((list) => <List key={list.id} id={list.id} />);
+    .map((list) => (
+      <List
+        key={list.id}
+        id={list.id}
+        onAddCardClick={handleAddCardClick}
+        onAddCardClose={handleAddCardClose}
+        activeList={activeList === list.id}
+      />
+    ));
 
   useEffect(() => {
-    dispatch(fetchBoard(id));
-  }, [dispatch, id]);
+    if (boardId) {
+      dispatch(fetchBoard(boardId));
+    }
+  }, [dispatch, boardId]);
 
   return (
     <>
@@ -34,7 +63,7 @@ const Board = () => {
           <div id="existing-lists" className="existing-lists">
             {listComponents}
           </div>
-          <AddList boardId={id} />
+          <AddList boardId={boardId} />
         </div>
       </main>
       <div className="menu-sidebar">

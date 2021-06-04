@@ -5,41 +5,55 @@ const HttpError = require("../models/httpError");
 const { validationResult } = require("express-validator");
 
 const getBoards = (req, res, next) => {
-  Board.find({}, "title _id createdAt updatedAt")
-    .then(boards => {
-      res.json({
-        boards,
-      })
-    })
+  Board.find({}, "title _id createdAt updatedAt").then((boards) => {
+    res.json({
+      boards,
+    });
+  });
 };
 
 const getBoard = (req, res, next) => {
   Board.findById(req.params.id)
     .populate({
-      path: 'lists',
+      path: "lists",
       populate: {
         path: "cards",
+        select: [
+          "description",
+          "id",
+          "title",
+          "boardId",
+          "position",
+          "dueDate",
+          "labels",
+          "listId",
+          "comments",
+          "commentCount",
+        ],
       },
     })
     .then((board) => {
       res.json({
         board,
-      })
+      });
     })
     .catch((err) => {
-      console.log(err)
+      console.log(err);
       res.status(404).end();
-    })
-}
+    });
+};
 
 const createBoard = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     Board.create(req.body)
       .then((board) => {
-        Board.find({ _id: board._id }, "title _id createdAt updatedAt").then(board => res.json({ board }))
+        Board.find(
+          { _id: board._id },
+          "title _id createdAt updatedAt"
+        ).then((board) => res.json({ board }));
       })
-      .catch(err =>
+      .catch((err) =>
         next(new HttpError("Creating board failed, please try again", 500))
       );
   } else {
@@ -48,10 +62,14 @@ const createBoard = (req, res, next) => {
 };
 
 const addListToBoard = (req, res, next) => {
-  Board.findByIdAndUpdate(req.body.boardId, { '$addToSet': { lists: req.list.id } }, { new: true })
-    .then(updatedBoard => res.json({ list: req.list }))
-    .catch(err => next(new HttpError("Could not add list to board", 500)))
-}
+  Board.findByIdAndUpdate(
+    req.body.boardId,
+    { $addToSet: { lists: req.list.id } },
+    { new: true }
+  )
+    .then((updatedBoard) => res.json({ list: req.list }))
+    .catch((err) => next(new HttpError("Could not add list to board", 500)));
+};
 
 exports.getBoards = getBoards;
 exports.getBoard = getBoard;
